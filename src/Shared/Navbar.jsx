@@ -95,7 +95,7 @@ const Navbar = () => {
             </button>
           </Link>
           <Link to="/register">
-            <button className="btn text-lg btn-sm bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 border-none text-white p-6 px-8 rounded-full capitalize shadow-lg shadow-cyan-500/30 transition-all hover:scale-105 active:scale-95">
+            <button className="hidden md:flex items-center justify-center bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white text-lg font-medium h-12 px-8 rounded-full capitalize shadow-lg shadow-cyan-500/30 transition-all hover:scale-105 active:scale-95 border-none">
               Get Started
             </button>
           </Link>
