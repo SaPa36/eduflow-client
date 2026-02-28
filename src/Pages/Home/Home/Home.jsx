@@ -5,6 +5,7 @@ import Features from "../Features/Features";
 import JoinTeacher from "../JoinTeacher/JoinTeacher";
 import Partners from "../Partners/Partners";
 import PopularCourses from "../PopularCourses/PopularCourses";
+import Stats from "../Stats/Stats";
 
 
 const Home = () => {
@@ -17,6 +18,7 @@ const Home = () => {
             <JoinTeacher></JoinTeacher>
             <Features></Features>
             <Testimonials></Testimonials>
+            <Stats></Stats>
         </div>
     );
 };
