@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import {
   FaGoogle,
@@ -9,8 +10,30 @@ import {
 } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
 import logo from "../../assets/logo3.png";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Register = () => {
+  const { createUser } = useContext(AuthContext);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    createUser(data.email, data.password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="h-screen flex  md:items-center justify-center bg-gray-50 px-4 overflow-hidden">
       <div className="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse h-auto md:h-[600px]">
@@ -80,45 +103,79 @@ const Register = () => {
               </button>
             </div>
 
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {/* Full Name Input */}
               <div className="form-control">
                 <input
                   type="text"
                   placeholder="Full Name"
+                  {...register("name", { required: "Name is required" })}
                   className="input input-bordered w-full focus:border-cyan-500 text-sm h-11"
-                  required
                 />
+                {errors.name && (
+                  <span className="text-red-500 text-[10px] mt-1">
+                    {errors.name.message}
+                  </span>
+                )}
               </div>
+
+              {/* Email Address Input */}
               <div className="form-control">
                 <input
                   type="email"
                   placeholder="Email Address"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  })}
                   className="input input-bordered w-full focus:border-cyan-500 text-sm h-11"
-                  required
                 />
+                {errors.email && (
+                  <span className="text-red-500 text-[10px] mt-1">
+                    {errors.email.message}
+                  </span>
+                )}
               </div>
 
+              {/* Password Input */}
               <div className="form-control">
                 <input
                   type="password"
                   placeholder="Create Password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
                   className="input input-bordered w-full focus:border-cyan-500 text-sm h-11"
-                  required
                 />
+                {errors.password && (
+                  <span className="text-red-500 text-[10px] mt-1">
+                    {errors.password.message}
+                  </span>
+                )}
               </div>
 
               <div className="flex items-center gap-2 py-1">
                 <input
                   type="checkbox"
+                  {...register("terms", { required: true })}
                   className="checkbox checkbox-xs checkbox-cyan"
-                  required
                 />
                 <span className="text-[10px] text-gray-500">
                   I agree to the Terms and Privacy Policy
                 </span>
               </div>
 
-              <button className="btn w-full bg-gradient-to-r from-cyan-400 to-blue-500 border-none text-white rounded-xl shadow-lg shadow-cyan-500/20 hover:scale-[1.01] transition-all h-12 min-h-0 mt-2 uppercase tracking-wide">
+              <button
+                type="submit"
+                className="btn w-full bg-gradient-to-r from-cyan-400 to-blue-500 border-none text-white rounded-xl shadow-lg shadow-cyan-500/20 hover:scale-[1.01] transition-all h-12 min-h-0 mt-2 uppercase tracking-wide"
+              >
                 Create Free Account
               </button>
             </form>
@@ -141,7 +198,6 @@ const Register = () => {
               <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
               <span>Back to Home</span>
             </Link>
-            
           </div>
         </div>
       </div>
