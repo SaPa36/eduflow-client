@@ -1,5 +1,5 @@
 
-import Testimonials from "../../Testimonials/Testimonials";
+import Testimonials from "../Testimonials/Testimonials";
 import Banner from "../Banner/Banner";
 import Features from "../Features/Features";
 import JoinTeacher from "../JoinTeacher/JoinTeacher";

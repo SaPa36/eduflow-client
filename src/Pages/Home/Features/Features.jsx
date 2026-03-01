@@ -48,7 +48,6 @@ const Features = () => {
             icon: <FaRocket />,
             color: "bg-emerald-50 text-emerald-500"
         },
-        /* --- ADDED TWO EXTRA FEATURES --- */
         {
             id: 7,
             title: "Lifetime Access",
@@ -66,47 +65,47 @@ const Features = () => {
     ];
 
     return (
-        <section className="py-12 bg-white"> {/* Reduced py-20 to py-12 */}
+        <section className="py-10 bg-white"> {/* Tight vertical padding */}
             <div className="container mx-auto px-6">
                 
-                {/* Header Area */}
-                <div className="text-center max-w-2xl mx-auto mb-10"> {/* Reduced mb-16 to mb-10 */}
-                    <span className="text-cyan-500 font-bold uppercase tracking-widest text-[10px] bg-cyan-50 px-3 py-1 rounded-full">
+                {/* Header Area - Consistent Font Sizes */}
+                <div className="text-center mb-8"> {/* Minimal bottom margin */}
+                    <span className="text-cyan-500 font-bold uppercase tracking-widest text-xs">
                         Why EduFlow?
                     </span>
-                    <h2 className="text-3xl font-extrabold text-slate-900 mt-3 mb-3 leading-tight">
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">
                         The Best Way to Learn <span className="text-cyan-500">Skills</span>
                     </h2>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-gray-500 mt-2 max-w-xl mx-auto">
                         Streamlined teaching designed to turn beginners into professionals.
                     </p>
                 </div>
 
-                {/* Compact Features Grid - Changed to lg:grid-cols-4 for smaller cards */}
+                {/* Grid - Controls card size via 'gap' and 'columns' */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"> 
                     {benefits.map((benefit) => (
                         <div 
                             key={benefit.id} 
-                            className="group p-5 rounded-2xl border border-gray-100 bg-white hover:border-cyan-100 hover:shadow-lg hover:shadow-cyan-500/5 transition-all duration-300"
+                            /* Reduced internal padding (p-5) to keep cards shorter */
+                            className="group p-5 rounded-2xl border border-gray-100 bg-white hover:border-cyan-200 hover:shadow-md transition-all duration-300"
                         >
-                            {/* Smaller Icon Container */}
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-4 transition-transform group-hover:scale-110 ${benefit.color}`}>
+                            {/* Icon - Medium Size for consistency */}
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 transition-transform group-hover:scale-110 ${benefit.color}`}>
                                 {benefit.icon}
                             </div>
                             
-                            <h3 className="text-md font-bold text-slate-800 mb-2 group-hover:text-cyan-600 transition-colors">
+                            {/* Original Title Size */}
+                            <h3 className="text-lg font-bold text-slate-800 mb-2">
                                 {benefit.title}
                             </h3>
                             
-                            <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">
+                            {/* Standard Description Size */}
+                            <p className="text-gray-500 text-sm leading-snug">
                                 {benefit.desc}
                             </p>
                         </div>
                     ))}
                 </div>
-
-                
-
             </div>
         </section>
     );

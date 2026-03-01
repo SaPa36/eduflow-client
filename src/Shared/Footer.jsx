@@ -15,7 +15,7 @@ import logo from "../assets/logo3.png";
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-50 border-t border-gray-200 pt-12 mt-20 pb-6 text-slate-600">
+        <footer className="bg-gray-50 border-t border-gray-200 pt-12 mt-16 pb-8 text-slate-600">
             <div className="container mx-auto px-6">
                 
                 {/* Top Section: Branding, Links & Newsletter */}
@@ -26,6 +26,7 @@ const Footer = () => {
                         <div className="flex items-center">
                             <img src={logo} alt="EduFlow Logo" className="h-10 w-auto object-contain" />
                         </div>
+                        {/* Font size set to text-sm for consistency */}
                         <p className="text-sm leading-relaxed max-w-xs text-gray-500">
                             Empowering learners worldwide with industry-vetted courses and expert mentorship. Join our global community today.
                         </p>
@@ -45,7 +46,8 @@ const Footer = () => {
                     <div className="lg:col-span-4 grid grid-cols-2 gap-4">
                         <div>
                             <h4 className="text-slate-900 font-bold text-sm mb-4 uppercase tracking-wider">Company</h4>
-                            <ul className="space-y-2 text-xs font-medium">
+                            {/* Standardized link sizes to text-sm */}
+                            <ul className="space-y-3 text-sm font-medium">
                                 <li><a href="#" className="hover:text-cyan-600 transition-colors">About Us</a></li>
                                 <li><a href="#" className="hover:text-cyan-600 transition-colors">Our Tutors</a></li>
                                 <li><a href="#" className="hover:text-cyan-600 transition-colors">Courses</a></li>
@@ -54,7 +56,7 @@ const Footer = () => {
                         </div>
                         <div>
                             <h4 className="text-slate-900 font-bold text-sm mb-4 uppercase tracking-wider">Support</h4>
-                            <ul className="space-y-2 text-xs font-medium">
+                            <ul className="space-y-3 text-sm font-medium">
                                 <li><a href="#" className="hover:text-cyan-600 transition-colors">Help Center</a></li>
                                 <li><a href="#" className="hover:text-cyan-600 transition-colors">Privacy Policy</a></li>
                                 <li><a href="#" className="hover:text-cyan-600 transition-colors">Terms of Service</a></li>
@@ -66,15 +68,15 @@ const Footer = () => {
                     {/* Newsletter Column */}
                     <div className="lg:col-span-4 space-y-4">
                         <h4 className="text-slate-900 font-bold text-sm uppercase tracking-wider">Stay Updated</h4>
-                        <p className="text-xs text-gray-500">Subscribe to get the latest course updates and discounts.</p>
+                        <p className="text-sm text-gray-500">Subscribe to get the latest course updates and discounts.</p>
                         <form className="relative flex items-center bg-white border border-gray-200 rounded-xl p-1 shadow-sm focus-within:border-cyan-500 transition-all">
                             <input 
                                 type="email" 
                                 placeholder="Your email address" 
-                                className="w-full bg-transparent py-2 px-3 text-xs focus:outline-none"
+                                className="w-full bg-transparent py-2 px-3 text-sm focus:outline-none"
                             />
                             <button className="bg-cyan-500 hover:bg-cyan-600 text-white p-2.5 rounded-lg transition-all">
-                                <FaPaperPlane className="text-xs" />
+                                <FaPaperPlane className="text-sm" />
                             </button>
                         </form>
                     </div>
@@ -82,12 +84,13 @@ const Footer = () => {
 
                 {/* Bottom Section: Copyright & Contact Info */}
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex flex-wrap justify-center md:justify-start gap-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    {/* Consistent font size text-xs for the bottom legal/contact bar */}
+                    <div className="flex flex-wrap justify-center md:justify-start gap-6 text-xs font-bold text-gray-400 uppercase tracking-widest">
                         <div className="flex items-center gap-2"><FaEnvelope className="text-cyan-500" /> support@eduflow.com</div>
                         <div className="flex items-center gap-2"><FaPhoneAlt className="text-cyan-500" /> +1 (555) 000-1234</div>
                         <div className="flex items-center gap-2"><FaMapMarkerAlt className="text-cyan-500" /> Silicon Valley, CA</div>
                     </div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                         © 2026 EduFlow Inc. All Rights Reserved.
                     </p>
                 </div>
