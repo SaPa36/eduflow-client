@@ -1,14 +1,17 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from "../Shared/Navbar";
 import Footer from '../Shared/Footer';
 
 const Main = () => {
+    const location = useLocation();
+
+    const noHeaderFooter = ["/login", "/register"].includes(location.pathname);
     return (
         <div className='lg:max-w-screen-xl mx-auto'>
-            <Navbar></Navbar>
+            {noHeaderFooter || <Navbar></Navbar>}
             <Outlet></Outlet>
-            <Footer></Footer>
+            {noHeaderFooter || <Footer></Footer>}
             
         </div>
     );
