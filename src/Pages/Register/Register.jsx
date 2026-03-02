@@ -13,7 +13,7 @@ import logo from "../../assets/logo3.png";
 import { AuthContext } from "../../providers/AuthProvider";
 
 const Register = () => {
-  const { createUser } = useContext(AuthContext);
+  const { createUser, googleSignIn } = useContext(AuthContext);
 
   const {
     register,
@@ -28,6 +28,17 @@ const Register = () => {
       })
       .catch((error) => {
         console.error("Firebase Error:", error);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((result) => {
+        console.log("Google Sign-In Success:", result.user);
+      }
+      )
+      .catch((error) => {
+        console.error("Google Sign-In Error:", error);
       });
   };
 
@@ -87,7 +98,7 @@ const Register = () => {
 
             {/* Social Auth */}
             <div className="flex gap-3 mb-6">
-              <button className="flex-1 btn btn-outline btn-sm border-gray-200 hover:bg-gray-50 gap-2 lowercase font-normal">
+              <button className="flex-1 btn btn-outline btn-sm border-gray-200 hover:bg-gray-50 gap-2 lowercase font-normal" onClick={handleGoogleSignIn}>
                 <FaGoogle className="text-red-500 text-xs" /> google
               </button>
               <button className="flex-1 btn btn-outline btn-sm border-gray-200 hover:bg-gray-50 gap-2 lowercase font-normal">
@@ -103,6 +114,9 @@ const Register = () => {
                   {...register("name", { required: "Name is required" })}
                   className={`input input-bordered w-full focus:border-cyan-500 text-sm h-11 ${errors.name ? 'border-red-500' : ''}`}
                 />
+                {errors.name && (
+                  <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+                )}
               </div>
 
               <div className="form-control">
@@ -112,6 +126,9 @@ const Register = () => {
                   {...register("email", { required: "Email is required" })}
                   className={`input input-bordered w-full focus:border-cyan-500 text-sm h-11 ${errors.email ? 'border-red-500' : ''}`}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                )}
               </div>
 
               <div className="form-control">
@@ -121,10 +138,15 @@ const Register = () => {
                   {...register("password", { required: "Password is required", minLength: 6 })}
                   className={`input input-bordered w-full focus:border-cyan-500 text-sm h-11 ${errors.password ? 'border-red-500' : ''}`}
                 />
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.password.type === 'minLength' ? 'Password must be at least 6 characters' : errors.password.message}
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center gap-2 py-1">
-                <input type="checkbox" {...register("terms", { required: true })} className="checkbox checkbox-xs checkbox-cyan" />
+                <input type="checkbox" {...register("terms", { required: "You must agree to the terms and privacy policy" })} className="checkbox checkbox-xs checkbox-cyan" />
                 <span className="text-[10px] text-gray-500">I agree to the Terms and Privacy Policy</span>
               </div>
 

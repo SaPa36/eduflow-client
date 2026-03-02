@@ -1,9 +1,44 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaGoogle, FaGithub, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
 import logo from "../../assets/logo3.png";
+import { AuthContext } from "../../providers/AuthProvider";
+import { useForm } from "react-hook-form"
 
 const Login = () => {
+
+  const {signIn, googleSignIn} = useContext(AuthContext);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
+
+  const onSubmit = (data) => {
+    console.log(data)
+    signIn(data.email, data.password)
+      .then((result) => {
+        console.log("User Signed In:", result.user);
+      })
+      .catch((error) => {
+        console.error("Sign-In Error:", error);
+      });
+  }
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((result) => {
+        console.log("Google Sign-In Success:", result.user);
+      }
+      )
+      .catch((error) => {
+        console.error("Google Sign-In Error:", error);
+      });
+  };
+
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 px-4 py-5 overflow-y-auto">
       <div className="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto ">
@@ -61,7 +96,7 @@ const Login = () => {
 
             {/* Social Buttons */}
             <div className="flex gap-3 my-6">
-              <button className="flex-1 btn btn-outline btn-sm border-gray-200 hover:bg-gray-50 gap-2 lowercase font-normal">
+              <button onClick={handleGoogleSignIn} className="flex-1 btn btn-outline btn-sm border-gray-200 hover:bg-gray-50 gap-2 lowercase font-normal">
                 <FaGoogle className="text-red-500 text-xs" /> google
               </button>
               <button className="flex-1 btn btn-outline btn-sm border-gray-200 hover:bg-gray-50 gap-2 lowercase font-normal">
@@ -69,14 +104,18 @@ const Login = () => {
               </button>
             </div>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div className="form-control">
                 <input
                   type="email"
                   placeholder="Email Address"
                   className="input input-bordered w-full focus:border-cyan-500 text-sm h-11 focus:outline-none"
                   required
+                  {...register("email", { required: "Email is required" })}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                )}
               </div>
 
               <div className="form-control">
@@ -85,7 +124,11 @@ const Login = () => {
                   placeholder="Password"
                   className="input input-bordered w-full focus:border-cyan-500 text-sm h-11 focus:outline-none"
                   required
+                  {...register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })}
                 />
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                )}
                 <div className="text-right mt-1">
                   <Link
                     to="/forgot"
