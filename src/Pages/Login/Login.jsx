@@ -1,17 +1,20 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle, FaGithub, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
 import logo from "../../assets/logo3.png";
 import { AuthContext } from "../../providers/AuthProvider";
 import { useForm } from "react-hook-form"
+import Swal from "sweetalert2";
 
 const Login = () => {
 
-  const {signIn, googleSignIn} = useContext(AuthContext);
+  const { signIn, googleSignIn } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
+    reset,
     watch,
     formState: { errors },
   } = useForm()
@@ -21,6 +24,15 @@ const Login = () => {
     signIn(data.email, data.password)
       .then((result) => {
         console.log("User Signed In:", result.user);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "You have been successfully logged in!",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        navigate("/");
+        reset();
       })
       .catch((error) => {
         console.error("Sign-In Error:", error);
@@ -31,6 +43,8 @@ const Login = () => {
     googleSignIn()
       .then((result) => {
         console.log("Google Sign-In Success:", result.user);
+        
+        navigate("/");
       }
       )
       .catch((error) => {

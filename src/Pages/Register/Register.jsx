@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaGoogle,
   FaGithub,
@@ -11,13 +11,18 @@ import {
 import { FaArrowLeft } from "react-icons/fa";
 import logo from "../../assets/logo3.png";
 import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
-  const { createUser, googleSignIn } = useContext(AuthContext);
+  const { createUser, googleSignIn, logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -25,6 +30,37 @@ const Register = () => {
     createUser(data.email, data.password)
       .then((result) => {
         console.log("User Created:", result.user);
+
+        const userInfo = {
+          name: data.name,
+          email: data.email,
+        }
+
+        // Save user info to the backend
+        axiosPublic.post('/users', userInfo)
+          .then(res => {
+            if (res.data.insertedId) {
+              console.log("User info saved successfully", res.data);
+              reset();
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Your account has been created successfully!",
+                showConfirmButton: false,
+                timer: 1500
+              });
+              navigate("/login");
+              logOut();
+            }
+            
+
+          })
+          .catch(err => {
+            console.error("Error saving user info:", err);
+          });
+
+
+
       })
       .catch((error) => {
         console.error("Firebase Error:", error);
@@ -35,6 +71,7 @@ const Register = () => {
     googleSignIn()
       .then((result) => {
         console.log("Google Sign-In Success:", result.user);
+        navigate("/login");
       }
       )
       .catch((error) => {
@@ -48,12 +85,12 @@ const Register = () => {
       3. overflow-y-auto: Allows scrolling if the card is taller than the screen.
     */
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 px-4 py-5 overflow-y-auto">
-      
+
       {/* The Card: Removed hardcoded h-[600px] to allow it to adjust 
         to the content height automatically.
       */}
       <div className="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse relative">
-        
+
         {/* Left Side: Brand Value Props (Blue Section) */}
         <div className="hidden md:flex md:w-[45%] bg-gradient-to-br from-cyan-500 to-blue-600 p-5 text-white flex-col justify-center">
           <div className="relative z-10">
