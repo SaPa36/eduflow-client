@@ -14,10 +14,15 @@ import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
 const Register = () => {
   const { createUser, googleSignIn, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
+
+
 
   const {
     register,
@@ -26,14 +31,25 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     createUser(data.email, data.password)
-      .then((result) => {
+
+      .then(async(result) => {
         console.log("User Created:", result.user);
+        //prepare the image for imgbb
+        const imageFile = { image: data.image[0] }; // Get the first file from the FileList
+        const res = await axiosPublic.post(image_hosting_api, imageFile, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        const imageUrl = res.data.data.display_url;
+        console.log("Image uploaded to imgbb:", imageUrl);
 
         const userInfo = {
           name: data.name,
           email: data.email,
+          image: imageUrl
         }
 
         // Save user info to the backend
@@ -52,7 +68,7 @@ const Register = () => {
               navigate("/login");
               logOut();
             }
-            
+
 
           })
           .catch(err => {
@@ -172,20 +188,42 @@ const Register = () => {
                 <input
                   type="password"
                   placeholder="Create Password"
-                  {...register("password", { required: "Password is required", minLength: 6 })}
+                  {...register("password", {
+                    required: true,
+                    minLength: 6,
+                    pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/
+                  })}
                   className={`input input-bordered w-full focus:border-cyan-500 text-sm h-11 ${errors.password ? 'border-red-500' : ''}`}
                 />
                 {errors.password && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.password.type === 'minLength' ? 'Password must be at least 6 characters' : errors.password.message}
+                    {errors.password.type === 'required' ? 'Password is required' :
+                      errors.password.type === 'minLength' ? 'Password must be at least 6 characters' :
+                        errors.password.type === 'pattern' ? 'Password must include uppercase, lowercase, number, and special character' :
+                          errors.password.message}
+
                   </p>
                 )}
               </div>
 
-              <div className="flex items-center gap-2 py-1">
-                <input type="checkbox" {...register("terms", { required: "You must agree to the terms and privacy policy" })} className="checkbox checkbox-xs checkbox-cyan" />
-                <span className="text-[10px] text-gray-500">I agree to the Terms and Privacy Policy</span>
+              {/* File Input */}
+              <div className="">
+                <input
+                  type="file"
+                  {...register("image", { required: "Profile image is required" })}
+                  className="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-none file:border-0
+                file:text-sm file:font-semibold
+                file:bg-gray-200 file:text-gray-700
+                hover:file:bg-gray-300 cursor-pointer"
+                />
+                {errors.image && (
+                  <p className="text-red-500 text-xs mt-1">{errors.image.message}</p>
+                )}
               </div>
+
+
 
               <button type="submit" className="btn w-full bg-gradient-to-r from-cyan-400 to-blue-500 border-none text-white rounded-xl shadow-lg shadow-cyan-500/20 hover:scale-[1.01] transition-all h-12 mt-2 uppercase tracking-wide">
                 Create Free Account
