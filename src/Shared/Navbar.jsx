@@ -85,7 +85,7 @@ const Navbar = () => {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow bg-slate-900 rounded-box w-52 gap-4"
+                            className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow bg-slate-900 text-white rounded-box w-52 gap-4"
                         >
                             {menuItems}
                         </ul>
@@ -129,7 +129,7 @@ const Navbar = () => {
                                     className="menu menu-sm dropdown-content mt-3 z-[20] p-2 shadow-2xl bg-white border border-gray-100 rounded-box w-56 space-y-1"
                                 >
                                     <li className="px-4 py-2 mb-1">
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Account</p>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{dbUser?.name || "Guest"}</p>
                                     </li>
 
                                     {/* Profile Option */}
