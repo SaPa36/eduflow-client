@@ -3,7 +3,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { FaArrowRight, FaPlay, FaGraduationCap, FaCode, FaChartLine } from 'react-icons/fa';
 
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -37,7 +36,7 @@ const Banner = () => {
     ];
 
     return (
-        <div className="relative min-h-screen pt-5  overflow-hidden">
+        <div className="relative overflow-hidden">
             <Swiper
                 spaceBetween={0}
                 centeredSlides={true}
@@ -49,65 +48,72 @@ const Banner = () => {
             >
                 {slides.map((slide, index) => (
                     <SwiperSlide key={index}>
-                        <div className="container mx-auto px-6 md:px-12 py-12 md:py-15 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                            
-                            {/* Left Content */}
-                            <div className="space-y-6 text-center lg:text-left animate-fade-in">
-                                <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-100 px-4 py-1.5 rounded-full">
-                                    <span className="text-xl">{slide.icon}</span>
-                                    <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">{slide.tag}</span>
-                                </div>
+                        {/* FIX: We use the slide.img as a background-image on the container 
+                           for mobile, and hide it for desktop (lg:bg-none).
+                        */}
+                        <div 
+                            className="relative min-h-[600px] lg:min-h-screen flex items-center bg-cover bg-center lg:bg-none"
+                            style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${slide.img})` }}
+                        >
+                            {/* On Desktop (lg), we remove the background image from the container 
+                               so it looks exactly like your original design.
+                            */}
+                            <div className="absolute inset-0 bg-white hidden lg:block -z-10"></div>
 
-                                <h1 className="text-5xl font-extrabold text-slate-900 leading-[1.1]">
-                                    {slide.title.split(' ').slice(0, -2).join(' ')} <br />
-                                    <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
-                                        {slide.title.split(' ').slice(-2).join(' ')}
-                                    </span>
-                                </h1>
-
-                                <p className="text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                                    {slide.desc}
-                                </p>
-
-                                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
-                                    <button className="w-full sm:w-auto bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-4 px-10 rounded-full shadow-xl shadow-cyan-500/20 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
-                                        {slide.btnText} <FaArrowRight />
-                                    </button>
-                                    <button className="flex items-center gap-3 text-slate-700 font-bold hover:text-cyan-600 transition-colors">
-                                        <div className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center shadow-sm">
-                                            <FaPlay className="text-[10px] ml-0.5" />
+                            <div className="container mx-auto px-6 md:px-12 py-12 relative z-10">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                                    
+                                    {/* Content Section */}
+                                    <div className="space-y-6 text-center lg:text-left animate-fade-in">
+                                        <div className="inline-flex items-center gap-2 bg-white/20 lg:bg-slate-50 border border-white/30 lg:border-slate-100 px-4 py-1.5 rounded-full backdrop-blur-sm lg:backdrop-blur-none">
+                                            <span className="text-xl">{slide.icon}</span>
+                                            <span className="text-xs font-bold text-white lg:text-slate-600 uppercase tracking-widest">{slide.tag}</span>
                                         </div>
-                                        Watch Trailer
-                                    </button>
-                                </div>
-                            </div>
 
-                            {/* Right Image with Decorative Shapes */}
-                            <div className="relative hidden lg:block">
-                                <div className="absolute -top-10 -right-10 w-64 h-64 bg-cyan-100 rounded-full blur-3xl opacity-50"></div>
-                                <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-[12px] border-white h-[450px]">
-                                    <img src={slide.img} alt="EduFlow Slide" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" />
+                                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white lg:text-slate-900 leading-[1.1]">
+                                            {slide.title.split(' ').slice(0, -2).join(' ')} <br />
+                                            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 lg:from-cyan-500 lg:to-blue-600 bg-clip-text text-transparent">
+                                                {slide.title.split(' ').slice(-2).join(' ')}
+                                            </span>
+                                        </h1>
+
+                                        <p className="text-base md:text-lg text-gray-100 lg:text-slate-600 max-w-xl mx-auto lg:mx-0">
+                                            {slide.desc}
+                                        </p>
+
+                                        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
+                                            <button className="w-full sm:w-auto bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:scale-105 transition-all flex items-center justify-center gap-2">
+                                                {slide.btnText} <FaArrowRight />
+                                            </button>
+                                            <button className="flex items-center gap-3 text-white lg:text-slate-700 font-bold">
+                                                <div className="w-10 h-10 rounded-full border border-white/40 lg:border-slate-200 flex items-center justify-center">
+                                                    <FaPlay className="text-[10px] ml-0.5" />
+                                                </div>
+                                                Watch Trailer
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Desktop Image Section (Hidden on Mobile) */}
+                                    <div className="relative hidden lg:block">
+                                        <div className="absolute -top-10 -right-10 w-64 h-64 bg-cyan-100 rounded-full blur-3xl opacity-50"></div>
+                                        <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-[12px] border-white h-[450px]">
+                                            <img src={slide.img} alt="EduFlow" className="w-full h-full object-cover" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </SwiperSlide>
                 ))}
             </Swiper>
-
-            {/* Custom CSS for Swiper Dots */}
+            
+            {/* Swiper Customization CSS */}
             <style jsx="true">{`
-                .swiper-pagination-bullet-active { 
-                    background: #22d3ee !important;
-                    width: 25px !important;
-                    border-radius: 5px !important;
-                    transition: width 0.3s ease;
+                @media (min-width: 1024px) {
+                    .relative.bg-cover { background-image: none !important; }
                 }
-                .swiper-button-next, .swiper-button-prev { 
-                    color: #22d3ee !important; 
-                    transform: scale(0.6); 
-                    transition: transform 0.3s ease;
-                }
-                @media (max-width: 768px) { .swiper-button-next, .swiper-button-prev { display: none; } }
+                .swiper-pagination-bullet-active { background: #22d3ee !important; width: 25px !important; border-radius: 5px !important; }
             `}</style>
         </div>
     );

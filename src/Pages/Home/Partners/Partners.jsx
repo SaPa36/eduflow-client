@@ -24,10 +24,10 @@ const Partners = () => {
     ];
 
     return (
-        <section className="py-16 bg-white border-y border-gray-100">
+        <section className="py-5 bg-white border-y border-gray-100">
             <div className="container mx-auto px-6">
                 {/* Header */}
-                <div className="text-center mb-12">
+                <div className="text-center md:mb-12">
                     <p className="text-sm font-bold text-gray-400 uppercase tracking-[0.3em] mb-3">
                         Our Partners & Collaborators
                     </p>

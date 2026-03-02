@@ -166,12 +166,14 @@ const Navbar = () => {
                     ) : (
                         <div className="navbar-end gap-3 ">
                             <Link to="/login">
-                                <button className="btn text-lg btn-ghost btn-sm p-6 text-black hover:text-cyan-400 capitalize font-medium">
+                                <button className="btn text-[15px] btn-ghost btn-sm p-6 text-black hover:text-cyan-400 capitalize font-medium">
                                     Log In
                                 </button>
                             </Link>
                             <Link to="/register">
-                                <button className="hidden md:flex items-center justify-center bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white text-lg font-medium h-12 px-8 rounded-full capitalize shadow-lg shadow-cyan-500/30 transition-all hover:scale-105 active:scale-95 border-none">
+                                <button className="hidden md:flex items-center justify-center bg-gradient-to-r from-cyan-400 to-blue-500
+                                 hover:from-cyan-500 hover:to-blue-600 text-white text-[15px] font-medium h-12 px-8 rounded-full
+                                  capitalize shadow-lg shadow-cyan-500/30 transition-all hover:scale-105 active:scale-95 border-none">
                                     Get Started
                                 </button>
                             </Link>
