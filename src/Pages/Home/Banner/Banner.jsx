@@ -49,7 +49,7 @@ const Banner = () => {
             >
                 {slides.map((slide, index) => (
                     <SwiperSlide key={index}>
-                        <div className="container mx-auto px-6 md:px-12 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div className="container mx-auto px-6 md:px-12 py-12 md:py-15 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                             
                             {/* Left Content */}
                             <div className="space-y-6 text-center lg:text-left animate-fade-in">
@@ -58,7 +58,7 @@ const Banner = () => {
                                     <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">{slide.tag}</span>
                                 </div>
 
-                                <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 leading-[1.1]">
+                                <h1 className="text-5xl font-extrabold text-slate-900 leading-[1.1]">
                                     {slide.title.split(' ').slice(0, -2).join(' ')} <br />
                                     <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
                                         {slide.title.split(' ').slice(-2).join(' ')}
@@ -85,7 +85,7 @@ const Banner = () => {
                             {/* Right Image with Decorative Shapes */}
                             <div className="relative hidden lg:block">
                                 <div className="absolute -top-10 -right-10 w-64 h-64 bg-cyan-100 rounded-full blur-3xl opacity-50"></div>
-                                <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-[12px] border-white h-[500px]">
+                                <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-[12px] border-white h-[450px]">
                                     <img src={slide.img} alt="EduFlow Slide" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700" />
                                 </div>
                             </div>
