@@ -5,8 +5,8 @@ import logo from "../../assets/logo3.png";
 
 const Login = () => {
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-50 px-4 overflow-hidden">
-      <div className="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-[600px]">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 px-4 py-5 overflow-y-auto">
+      <div className="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto ">
         {/* Left Side: Compact Brand Identity - HIDDEN ON MOBILE */}
         <div className="hidden md:flex md:w-[45%] bg-gradient-to-br from-cyan-500 to-blue-600 p-10 text-white flex-col justify-center relative">
           <div className="relative z-10">
@@ -37,14 +37,14 @@ const Login = () => {
                 "The best class management tool I've used in years."
               </p>
               <p className="mt-2 font-bold text-xs text-cyan-200">
-                — NHur Sap, Dev
+                — Nur Sapa, Dev
               </p>
             </div>
           </div>
         </div>
 
         {/* Right Side: Clean Login Form - FULL WIDTH ON MOBILE */}
-        <div className="w-full md:w-[55%] p-8 md:p-12 bg-white flex flex-col justify-center">
+        <div className="w-full md:w-[55%] p-8  bg-white flex flex-col justify-center">
           <div className="max-w-sm mx-auto w-full">
             {/* Logo centered at top of form */}
             <div className="flex justify-center mb-6">
@@ -112,10 +112,7 @@ const Login = () => {
             </p>
 
             {/* Go Back Home Button */}
-            <Link
-              to="/"
-              className="absolute top-6 left-8 flex items-center gap-2 text-gray-500 hover:text-cyan-500 transition-colors text-sm font-medium group"
-            >
+            <Link to="/" className="absolute top-6 left-8 flex items-center gap-2 text-gray-400 hover:text-cyan-500 transition-colors text-xs font-medium group">
               <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
               <span>Back to Home</span>
             </Link>
