@@ -50,7 +50,8 @@ const Register = () => {
         const userInfo = {
           name: data.name,
           email: data.email,
-          image: imageUrl
+          image: imageUrl,
+          role: 'student'
         }
 
         // Save user info to the backend

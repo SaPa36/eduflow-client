@@ -38,45 +38,29 @@ const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        setUser(currentUser);
 
+        if (currentUser) {
+            const userInfo = { email: currentUser.email };
             
-
-
-            // If user exists, fetch their extra info from MongoDB
-            if (currentUser?.email) {
-                axios.get(`http://localhost:5000/users/${currentUser.email}`)
-                    .then(res => {
-                        setDbUser(res.data);
-                        setLoading(false);
-                    });
-            } else {
-                setDbUser(null);
-                setLoading(false);
+            // 1. Get Token and save to LocalStorage
+            const tokenRes = await axiosPublic.post('/jwt', userInfo);
+            if (tokenRes.data.token) {
+                localStorage.setItem('access-token', tokenRes.data.token);
+                
+                // 2. ONLY AFTER token is saved, get DB user
+                const dbRes = await axios.get(`http://localhost:5000/users/${currentUser.email}`);
+                setDbUser(dbRes.data);
             }
-
-            //jwt token handling
-            if (currentUser) {
-                const userInfo = {
-                    email: currentUser.email
-                }
-                axiosPublic.post('/jwt', userInfo)
-                    .then(res => {
-                        if (res.data.token) {
-                            localStorage.setItem('access-token', res.data.token);
-                        }
-                        else {
-                            localStorage.removeItem('access-token');
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            }
-        });
-        return () => unsubscribe();
-    }, []);
+        } else {
+            localStorage.removeItem('access-token');
+            setDbUser(null);
+        }
+        setLoading(false);
+    });
+    return () => unsubscribe();
+}, []);
 
 
     const authInfo = {

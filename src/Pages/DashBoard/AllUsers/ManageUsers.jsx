@@ -10,10 +10,14 @@ const ManageUsers = () => {
     const queryClient = useQueryClient();
 
     // 1. Fetch all users
-    const { data: users = [], isLoading } = useQuery({
+    const { refetch, data: users = [], isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/users');
+            const res = await axiosSecure.get('/users', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('access-token')}`
+                }
+            });
             return res.data;
         }
     });
@@ -26,6 +30,7 @@ const ManageUsers = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['users']); // Refresh the list automatically
+            refetch(); // Ensure the UI reflects the updated data
             Swal.fire("Success!", "User role has been updated.", "success");
         }
     });

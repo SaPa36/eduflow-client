@@ -51,10 +51,10 @@ const Navbar = () => {
             </li>
             <li>
                 <NavLink
-                    to="/about"
+                    to="dashboard/manage-users"
                     className={({ isActive }) => (isActive ? activeLink : normalLink)}
                 >
-                    About Us
+                    Manage Users
                 </NavLink>
             </li>
         </>
