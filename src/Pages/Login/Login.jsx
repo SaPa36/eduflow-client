@@ -1,15 +1,21 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { use, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaGoogle, FaGithub, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
 import logo from "../../assets/logo3.png";
 import { AuthContext } from "../../providers/AuthProvider";
 import { useForm } from "react-hook-form"
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Login = () => {
 
   const { signIn, googleSignIn } = useContext(AuthContext);
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
+  const location = useLocation();
+
+  // Redirect user back to where they came from, or to Home
+  const from = location.state?.from?.pathname || "/";
 
   const {
     register,
@@ -42,11 +48,34 @@ const Login = () => {
   const handleGoogleSignIn = () => {
     googleSignIn()
       .then((result) => {
-        console.log("Google Sign-In Success:", result.user);
+        const user = result.user;
+        console.log("Google Sign-In Success:", user);
+
+        // Prepare user info for MongoDB
+        const userInfo = {
+          name: user.displayName,
+          email: user.email,
+          image: user.photoURL,
+          role: 'student' // Default role for new social logins
+        };
+
         
-        navigate("/");
-      }
-      )
+
+        // Send to backend
+        // This ensures new users are saved even if they never saw the Register page
+        axiosPublic.post('/users', userInfo)
+          .then(res => {
+            console.log("DB sync complete:", res.data);
+            Swal.fire({
+              title: "Success!",
+              text: "Login successful",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+            navigate(from, { replace: true });
+          });
+      })
       .catch((error) => {
         console.error("Google Sign-In Error:", error);
       });

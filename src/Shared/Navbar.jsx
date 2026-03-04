@@ -118,7 +118,7 @@ const Navbar = () => {
                                     <div className="w-10 rounded-full">
                                         <img
                                             alt="User Profile"
-                                            src={dbUser?.image || "https://i.ibb.co/mJR9n1S/default-avatar.png"}
+                                            src={dbUser?.image || user?.photoURL || "https://i.ibb.co/mJR9n1S/default-avatar.png"}
                                         />
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@ const Navbar = () => {
                                     className="menu menu-sm dropdown-content mt-3 z-[20] p-2 shadow-2xl bg-white border border-gray-100 rounded-box w-56 space-y-1"
                                 >
                                     <li className="px-4 py-2 mb-1">
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{dbUser?.name || "Guest"}</p>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{dbUser?.name || user?.displayName || "Guest"}</p>
                                     </li>
 
                                     {/* Profile Option */}

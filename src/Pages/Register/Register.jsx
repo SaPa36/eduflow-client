@@ -35,7 +35,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     createUser(data.email, data.password)
 
-      .then(async(result) => {
+      .then(async (result) => {
         console.log("User Created:", result.user);
         //prepare the image for imgbb
         const imageFile = { image: data.image[0] }; // Get the first file from the FileList
@@ -87,13 +87,26 @@ const Register = () => {
 
   const handleGoogleSignIn = () => {
     googleSignIn()
-      .then((result) => {
-        console.log("Google Sign-In Success:", result.user);
-        navigate("/login");
-      }
-      )
-      .catch((error) => {
-        console.error("Google Sign-In Error:", error);
+      .then(result => {
+        const user = result.user;
+        console.log(user);
+        const userInfo = {
+          name: user.displayName,
+          email: user.email,
+          image: user.photoURL,
+          role: 'student'
+        }
+        axiosPublic.post('/users', userInfo)
+          .then(res => {
+            console.log(res.data);
+            navigate('/login');
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      })
+      .catch(error => {
+        console.log(error);
       });
   };
 

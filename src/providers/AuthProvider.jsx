@@ -34,6 +34,8 @@ const AuthProvider = ({ children }) => {
 
     const logOut = () => {
         setLoading(true);
+        // Clear the token immediately when the user clicks logout
+        localStorage.removeItem('access-token');
         return signOut(auth);
     }
 
@@ -41,38 +43,38 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
 
-            // If user exists, fetch their extra info from MongoDB
             if (currentUser?.email) {
+                // 1. Fetch User Data from MongoDB
+                // Make sure the URL matches your backend route precisely
                 axios.get(`http://localhost:5000/users/${currentUser.email}`)
                     .then(res => {
                         setDbUser(res.data);
+                        // CRITICAL: Only stop loading after we have the data
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        console.error("Error fetching user data:", err);
                         setLoading(false);
                     });
-            } else {
-                setDbUser(null);
-                setLoading(false);
-            }
 
-            //jwt token handling
-            if (currentUser) {
-                const userInfo = {
-                    email: currentUser.email
-                }
+                // 2. JWT handling (Runs in background)
+                const userInfo = { email: currentUser.email };
                 axiosPublic.post('/jwt', userInfo)
                     .then(res => {
                         if (res.data.token) {
                             localStorage.setItem('access-token', res.data.token);
+
+                            // AUTO LOGOUT LOGIC (1 Hour)
+                            const payload = JSON.parse(atob(res.data.token.split('.')[1]));
+                            const timeLeft = (payload.exp * 1000) - Date.now();
+                            setTimeout(() => { logOut(); }, timeLeft);
                         }
-                        else {
-                            localStorage.removeItem('access-token');
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
                     });
+            } else {
+                setDbUser(null);
+                localStorage.removeItem('access-token');
+                setLoading(false);
             }
-
-
         });
         return () => unsubscribe();
     }, []);
