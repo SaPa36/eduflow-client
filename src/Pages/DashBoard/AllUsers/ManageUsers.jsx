@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { FaUserShield, FaChalkboardTeacher } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { AuthContext } from '../../../providers/AuthProvider';
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure();
     const queryClient = useQueryClient();
+    const {loading} = useContext(AuthContext);
 
     // 1. Fetch all users
     const { refetch, data: users = [], isLoading } = useQuery({
         queryKey: ['users'],
+        enabled: !loading && !!localStorage.getItem('access-token'), // Only run if not loading and token exists
         queryFn: async () => {
             const res = await axiosSecure.get('/users', {
                 headers: {
