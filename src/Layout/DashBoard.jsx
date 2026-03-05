@@ -1,5 +1,8 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { FaUsers, FaBook, FaPlusSquare, FaHome, FaGraduationCap, FaLayerGroup, FaUserAlt, FaSignOutAlt } from "react-icons/fa";
+import {
+    FaUsers, FaBook, FaPlusSquare, FaHome, FaGraduationCap, FaLayerGroup, FaUserAlt, FaSignOutAlt,
+    
+} from "react-icons/fa";
 import { useContext, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import logo from "../assets/logo5.png";
@@ -16,10 +19,9 @@ const DashBoard = () => {
     };
 
     const navLinkClass = ({ isActive }) =>
-        `flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 ${
-            isActive
-                ? 'bg-cyan-500/10 text-cyan-400 border-l-4 border-cyan-500 font-bold shadow-[0_0_15px_rgba(6,182,212,0.1)]'
-                : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-100'
+        `flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 ${isActive
+            ? 'bg-cyan-500/10 text-cyan-400 border-l-4 border-cyan-500 font-bold shadow-[0_0_15px_rgba(6,182,212,0.1)]'
+            : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-100'
         }`;
 
     return (
@@ -47,6 +49,7 @@ const DashBoard = () => {
                                         <FaLayerGroup size={16} /> <span>All Classes</span>
                                     </NavLink>
                                 </li>
+                                
                                 <li>
                                     <NavLink to="/dashboard/manage-users" className={navLinkClass}>
                                         <FaUsers size={16} /> <span>Manage Users</span>
@@ -89,7 +92,7 @@ const DashBoard = () => {
                         </li>
                     </ul>
                 </nav>
-                
+
                 <div className="p-4 text-center text-[10px] text-slate-600 uppercase tracking-widest border-t border-slate-800">
                     EduFlow Dashboard v2.0
                 </div>
@@ -107,7 +110,7 @@ const DashBoard = () => {
 
                     {/* Top Right Profile Dropdown */}
                     <div className="relative">
-                        <button 
+                        <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             className="flex items-center gap-3 p-1 pr-3 rounded-full hover:bg-slate-100 transition-all border border-transparent hover:border-slate-200"
                         >
@@ -115,9 +118,9 @@ const DashBoard = () => {
                                 <p className="text-xs font-bold text-slate-800 leading-none">{dbUser?.name?.split(' ')[0]}</p>
                                 <p className="text-[10px] text-cyan-600 font-bold uppercase tracking-tighter">{role}</p>
                             </div>
-                            <img 
-                                src={dbUser?.image || 'https://i.ibb.co/mJR9Qad/user.png'} 
-                                alt="user" 
+                            <img
+                                src={dbUser?.image || 'https://i.ibb.co/mJR9Qad/user.png'}
+                                alt="user"
                                 className="w-10 h-10 rounded-full object-cover border-2 border-cyan-500 p-0.5"
                             />
                         </button>
@@ -128,14 +131,14 @@ const DashBoard = () => {
                                 <div className="px-4 py-2 border-b border-slate-50 mb-1">
                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Account</p>
                                 </div>
-                                <Link 
-                                    to="/dashboard/profile" 
+                                <Link
+                                    to="/dashboard/profile"
                                     onClick={() => setIsMenuOpen(false)}
                                     className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:bg-cyan-50 hover:text-cyan-600 transition-colors"
                                 >
                                     <FaUserAlt className="text-xs" /> Profile
                                 </Link>
-                                <button 
+                                <button
                                     onClick={handleLogOut}
                                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
                                 >

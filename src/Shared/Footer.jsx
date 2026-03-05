@@ -15,7 +15,7 @@ import logo from "../assets/logo3.png";
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-50 border-t border-gray-200 pt-12 mt-16 pb-8 text-slate-600">
+        <footer className="bg-gray-50 border-t border-gray-200 pt-12 md:mt-15 pb-8 text-slate-600">
             <div className="container mx-auto px-6">
                 
                 {/* Top Section: Branding, Links & Newsletter */}

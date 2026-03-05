@@ -10,6 +10,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import DashBoard from "../Layout/DashBoard";
 import ManageUsers from "../Pages/DashBoard/AllUsers/ManageUsers";
 import AdminRoutes from "./AdminRoutes";
+import BecomeTutor from "../Pages/BecomeTutor/BecomeTutor";
 
 
 export const router = createBrowserRouter([
@@ -28,7 +29,12 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>
+      },
+      {
+        path: "become-tutor",
+        element: <BecomeTutor></BecomeTutor>
       }
+      
     ]
   },
   
