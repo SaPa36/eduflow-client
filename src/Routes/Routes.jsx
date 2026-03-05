@@ -9,6 +9,7 @@ import Register from "../Pages/Register/Register";
 import PrivateRoutes from "./PrivateRoutes";
 import DashBoard from "../Layout/DashBoard";
 import ManageUsers from "../Pages/DashBoard/AllUsers/ManageUsers";
+import AdminRoutes from "./AdminRoutes";
 
 
 export const router = createBrowserRouter([
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
       // Admin Routes
       { 
         path: "manage-users",
-        element: <ManageUsers></ManageUsers>
+        element: <AdminRoutes><ManageUsers></ManageUsers></AdminRoutes>
       },
       // { path: "all-classes", element: <AdminAllClasses /> },
 
