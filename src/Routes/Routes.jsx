@@ -12,6 +12,9 @@ import ManageUsers from "../Pages/DashBoard/AllUsers/ManageUsers";
 import AdminRoutes from "./AdminRoutes";
 import BecomeTutor from "../Pages/BecomeTutor/BecomeTutor";
 import TeacherRequests from "../Pages/DashBoard/TeachersRequests/TeacherRequests";
+import AddClass from "../Pages/DashBoard/AddClas/AddClass";
+import MyClass from "../Pages/DashBoard/MyClass/MyClass";
+import TeacherRoutes from "./TeacherRoutes";
 
 
 export const router = createBrowserRouter([
@@ -51,12 +54,19 @@ export const router = createBrowserRouter([
       {
         path: "teachers-requests",
         element: <AdminRoutes><TeacherRequests></TeacherRequests></AdminRoutes>
-      }
+      },
+     
       // { path: "all-classes", element: <AdminAllClasses /> },
 
-      // // Teacher Routes
-      // { path: "add-class", element: <AddClass /> },
-      // { path: "my-classes", element: <MyClasses /> },
+      // Teacher Routes
+      { 
+        path: "add-class",
+        element: <TeacherRoutes><AddClass></AddClass> </TeacherRoutes>
+      },
+      { 
+        path: "my-classes", 
+        element: <TeacherRoutes><MyClass></MyClass></TeacherRoutes> 
+      },
 
       // // Student Routes
       // { path: "my-enroll-classes", element: <MyEnrolled /> },
