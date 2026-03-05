@@ -24,18 +24,24 @@ const TeachersRequests = () => {
   });
 
   const handleApprove = async (request) => {
+    // This sends the email to the backend so the backend knows which user to promote
     const res = await axiosSecure.patch(
       `/teachers-requests/approve/${request._id}`,
       { email: request.email }
     );
-    if (res.data.modifiedCount > 0) {
+
+    // Check for success in either result
+    if (
+      res.data.requestResult?.modifiedCount > 0 ||
+      res.data.userResult?.modifiedCount > 0
+    ) {
       refetch();
       Swal.fire({
         icon: "success",
         title: "Teacher Approved",
+        text: `${request.name} is now a teacher!`,
         showConfirmButton: false,
         timer: 1500,
-        customClass: { popup: "rounded-3xl" },
       });
     }
   };
