@@ -27,7 +27,7 @@ const DashBoard = () => {
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-[#F1F5F9]">
             {/* Sidebar */}
-            <div className="w-full md:w-54 bg-[#0F172A] text-white flex flex-col shadow-2xl z-20">
+            <div className="w-full md:w-60 bg-[#0F172A] text-white flex flex-col shadow-2xl z-20">
                 <div className="p-6 relative">
                     <Link to="/" className="relative z-10 block">
                         <img
@@ -40,13 +40,19 @@ const DashBoard = () => {
                 </div>
 
                 <nav className="flex-grow px-3 mt-2">
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[2px] mb-3 px-4">Management</p>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[2px] mb-3 px-2">Management</p>
                     <ul className="space-y-1">
                         {role === 'admin' && (
                             <>
                                 <li>
                                     <NavLink to="/dashboard/all-classes" className={navLinkClass}>
                                         <FaLayerGroup size={16} /> <span>All Classes</span>
+                                    </NavLink>
+                                </li>
+
+                                <li>
+                                    <NavLink to="/dashboard/teachers-requests" className={navLinkClass}>
+                                        <FaUserAlt size={16} /> <span>Teachers Requests</span>
                                     </NavLink>
                                 </li>
                                 

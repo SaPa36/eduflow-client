@@ -21,7 +21,7 @@ const BecomeTutor = () => {
         };
 
         try {
-            const res = await axiosSecure.post('/teachers-request', application);
+            const res = await axiosSecure.post('/teachers-requests', application);
             if (res.data.insertedId) {
                 Swal.fire({
                     icon: "success",

@@ -11,6 +11,7 @@ import DashBoard from "../Layout/DashBoard";
 import ManageUsers from "../Pages/DashBoard/AllUsers/ManageUsers";
 import AdminRoutes from "./AdminRoutes";
 import BecomeTutor from "../Pages/BecomeTutor/BecomeTutor";
+import TeacherRequests from "../Pages/DashBoard/TeachersRequests/TeacherRequests";
 
 
 export const router = createBrowserRouter([
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "become-tutor",
-        element: <BecomeTutor></BecomeTutor>
+        element: <PrivateRoutes><BecomeTutor></BecomeTutor></PrivateRoutes>
       }
       
     ]
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
         path: "manage-users",
         element: <AdminRoutes><ManageUsers></ManageUsers></AdminRoutes>
       },
+      {
+        path: "teachers-requests",
+        element: <AdminRoutes><TeacherRequests></TeacherRequests></AdminRoutes>
+      }
       // { path: "all-classes", element: <AdminAllClasses /> },
 
       // // Teacher Routes
