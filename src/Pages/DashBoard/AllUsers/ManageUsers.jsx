@@ -9,43 +9,34 @@ import { AuthContext } from '../../../providers/AuthProvider';
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure();
     const queryClient = useQueryClient();
-    const {loading} = useContext(AuthContext);
+    const { loading } = useContext(AuthContext);
 
     // 1. Fetch all users
     const { refetch, data: users = [], isLoading } = useQuery({
         queryKey: ['users'],
         enabled: !loading && !!localStorage.getItem('access-token'), // Only run if not loading and token exists
         queryFn: async () => {
-            const res = await axiosSecure.get('/users', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('access-token')}`
-                }
-            });
-            return res.data;
-        }
-    });
+            const res = await axiosSecure.get('/users');
 
-    // 2. Logic to change role (Mutation)
-    const { mutate: updateRole } = useMutation({
-        mutationFn: async ({ userId, newRole }) => {
-            const res = await axiosSecure.patch(`/users/role/${userId}`, { role: newRole });
             return res.data;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['users']); // Refresh the list automatically
-            refetch(); // Ensure the UI reflects the updated data
-            Swal.fire("Success!", "User role has been updated.", "success");
         }
     });
 
     const handleMakeAdmin = (user) => {
-        updateRole({ userId: user._id, newRole: 'admin' });
+        axiosSecure.patch(`/users/admin/${user._id}`)
+            .then(res => {
+                if (res.data.modifiedCount > 0) {
+                    refetch(); // Refetch to get the updated user list
+                    Swal.fire({
+                        title: "Success!",
+                        text: `${user.name} is now an admin.`,
+                        icon: "success"
+                    });
+                }
+            })
+            .catch(error => console.log(error));
     };
-
-    const handleMakeTeacher = (user) => {
-        updateRole({ userId: user._id, newRole: 'teacher' });
-    };
-
+    
     if (isLoading) return <span className="loading loading-dots loading-lg"></span>;
 
     return (
@@ -77,23 +68,22 @@ const ManageUsers = () => {
                             </td>
                             <td>{user.email}</td>
                             <td>
-                                <span className={`badge border-none font-bold text-[10px] ${
-                                    user.role === 'admin' ? 'bg-red-100 text-red-600' : 
-                                    user.role === 'teacher' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
-                                }`}>
+                                <span className={`badge border-none font-bold text-[10px] ${user.role === 'admin' ? 'bg-red-100 text-red-600' :
+                                        user.role === 'teacher' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
+                                    }`}>
                                     {user.role}
                                 </span>
                             </td>
                             <td className="flex justify-center gap-2">
-                                <button 
+                                <button
                                     onClick={() => handleMakeAdmin(user)}
                                     disabled={user.role === 'admin'}
-                                    className="btn btn-sm bg-orange-500 hover:bg-orange-600 text-white border-none tooltip" 
+                                    className="btn btn-sm bg-orange-500 hover:bg-orange-600 text-white border-none tooltip"
                                     data-tip="Make Admin"
                                 >
                                     <FaUserShield />
                                 </button>
-                                <button 
+                                <button
                                     onClick={() => handleMakeTeacher(user)}
                                     disabled={user.role === 'teacher'}
                                     className="btn btn-sm bg-cyan-500 hover:bg-cyan-600 text-white border-none tooltip"
