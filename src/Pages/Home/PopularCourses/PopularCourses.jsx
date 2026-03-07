@@ -23,7 +23,7 @@ const PopularCourses = () => {
         queryKey: ["popularCourses"],
         queryFn: async () => {
             const res = await axiosPublic.get("/classes");
-            return res.data;
+            return res.data.filter(cls => cls.status === 'approved');
         }
     });
 

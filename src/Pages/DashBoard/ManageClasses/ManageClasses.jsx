@@ -34,10 +34,12 @@ const ManageClasses = () => {
     if (isLoading) return <div className="text-center py-20">Loading...</div>;
 
     return (
-        <div className="p-10 bg-slate-50 min-h-screen">
-            <h2 className="text-3xl font-black mb-8 text-slate-800">Manage All Classes</h2>
-            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-                <table className="table w-full">
+        <div className=" bg-slate-50 min-h-screen">
+            <h2 className="text-3xl font-black mb-5 text-slate-800">Manage 
+             <span className='bg-gradient-to-r from-cyan-400 to-blue-400
+                      lg:from-cyan-500 lg:to-blue-600 bg-clip-text text-transparent'> All Classes    </span></h2>
+            <div className="bg-white overflow-x-auto rounded-3xl shadow-sm border border-slate-100 ">
+                <table className="table w-full ">
                     <thead>
                         <tr className="bg-slate-100 text-slate-500">
                             <th>Class Info</th>
