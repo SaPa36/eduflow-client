@@ -6,6 +6,7 @@ import {
 import { useContext, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import logo from "../assets/logo5.png";
+import { SiGoogleclassroom } from "react-icons/si";
 
 const DashBoard = () => {
     const { dbUser, logOut } = useContext(AuthContext);
@@ -59,6 +60,11 @@ const DashBoard = () => {
                                 <li>
                                     <NavLink to="/dashboard/manage-users" className={navLinkClass}>
                                         <FaUsers size={16} /> <span>Manage Users</span>
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/manage-classes" className={navLinkClass}>
+                                        <SiGoogleclassroom size={16} /> <span>Manage Classes</span>
                                     </NavLink>
                                 </li>
                             </>

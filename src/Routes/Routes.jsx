@@ -15,6 +15,7 @@ import TeacherRequests from "../Pages/DashBoard/TeachersRequests/TeacherRequests
 import AddClass from "../Pages/DashBoard/AddClas/AddClass";
 import MyClass from "../Pages/DashBoard/MyClass/MyClass";
 import TeacherRoutes from "./TeacherRoutes";
+import ManageClasses from "../Pages/DashBoard/ManageClasses/ManageClasses";
 
 
 export const router = createBrowserRouter([
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: "teachers-requests",
         element: <AdminRoutes><TeacherRequests></TeacherRequests></AdminRoutes>
+      },
+      {
+        path: "manage-classes",
+        element: <AdminRoutes><ManageClasses></ManageClasses></AdminRoutes>
       },
      
       // { path: "all-classes", element: <AdminAllClasses /> },

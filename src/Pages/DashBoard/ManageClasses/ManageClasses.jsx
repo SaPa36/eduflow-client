@@ -1,0 +1,92 @@
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import Swal from 'sweetalert2';
+
+const ManageClasses = () => {
+    const axiosSecure = useAxiosSecure();
+
+    // Fetch all classes regardless of email
+    const { data: allClasses = [], isLoading, refetch } = useQuery({
+        queryKey: ['all-classes'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/classes');
+            return res.data;
+        }
+    });
+
+    const handleStatusUpdate = (id, status) => {
+        axiosSecure.patch(`/classes/status/${id}`, { status })
+            .then(res => {
+                if (res.data.modifiedCount > 0) {
+                    refetch();
+                    Swal.fire({
+                        icon: 'success',
+                        title: `Class ${status} successfully!`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            });
+    };
+
+    if (isLoading) return <div className="text-center py-20">Loading...</div>;
+
+    return (
+        <div className="p-10 bg-slate-50 min-h-screen">
+            <h2 className="text-3xl font-black mb-8 text-slate-800">Manage All Classes</h2>
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                <table className="table w-full">
+                    <thead>
+                        <tr className="bg-slate-100 text-slate-500">
+                            <th>Class Info</th>
+                            <th>Instructor</th>
+                            <th>Status</th>
+                            <th className="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {allClasses.map(cls => (
+                            <tr key={cls._id}>
+                                <td>
+                                    <div className="font-bold">{cls.title}</div>
+                                    <div className="text-xs text-slate-400">${cls.price}</div>
+                                </td>
+                                <td>
+                                    <div>{cls.name}</div>
+                                    <div className="text-xs text-slate-400">{cls.email}</div>
+                                </td>
+                                <td>
+                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${cls.status === 'approved' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'}`}>
+                                        {cls.status}
+                                    </span>
+                                </td>
+                                <td className="text-center">
+                                    <div className="flex justify-center gap-2">
+                                        <button 
+                                            disabled={cls.status === 'approved'}
+                                            onClick={() => handleStatusUpdate(cls._id, 'approved')}
+                                            className="p-2 text-green-500 hover:bg-green-50 rounded-lg"
+                                        >
+                                            <FaCheckCircle size={20} />
+                                        </button>
+                                        <button 
+                                            disabled={cls.status === 'rejected'}
+                                            onClick={() => handleStatusUpdate(cls._id, 'rejected')}
+                                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                                        >
+                                            <FaTimesCircle size={20} />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
+
+export default ManageClasses;
