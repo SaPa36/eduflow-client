@@ -26,14 +26,13 @@ const AddClass = () => {
   };
 
   const onSubmit = async (data) => {
-
     const formData = new FormData();
     formData.append("image", data.image[0]);
-  
+
     const res2 = await axiosPublic.post(image_hosting_api, formData);
-  
+
     const imageUrl = res2.data.data.display_url;
-  
+
     const classInfo = {
       title: data.title,
       name: user?.displayName,
@@ -44,9 +43,9 @@ const AddClass = () => {
       status: "pending",
       total_enrolment: 0,
     };
-  
+
     const res = await axiosSecure.post("/classes", classInfo);
-  
+
     if (res.data.insertedId) {
       Swal.fire({
         icon: "success",
@@ -54,7 +53,7 @@ const AddClass = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-  
+
       navigate("/dashboard/my-classes");
     }
   };
@@ -151,19 +150,30 @@ const AddClass = () => {
                     <FaImage className="text-slate-300 text-xl" />
                   )}
                 </div>
-                {/* Upload Button */}
-                <label className="flex-grow text-center py-2 bg-white border border-slate-200 hover:border-cyan-300 hover:text-cyan-500 rounded-lg cursor-pointer transition-all text-sm font-bold text-slate-600">
+
+                {/* The Styled Button (Label) */}
+                <label
+                  htmlFor="file-upload"
+                  className="flex-grow text-center py-2 bg-white border border-slate-200 hover:border-cyan-300 hover:text-cyan-500 rounded-lg cursor-pointer transition-all text-sm font-bold text-slate-600"
+                >
                   {preview ? "Change Photo" : "Choose File"}
-                  <input
-                    type="file"
-                    {...register("image", { required: true })}
-                    onChange={handleImageChange}
-                    // className="hidden"
-                    accept="image/*"
-                  />
                 </label>
+
+                {/* The Hidden Input - Using ID to link to the label */}
+                <input
+                  id="file-upload"
+                  type="file"
+                  {...register("image", { required: true })}
+                  onChange={(e) => {
+                    handleImageChange(e); // Trigger your preview
+                    register("image").onChange(e); // Inform React Hook Form of the change
+                  }}
+                  className="hidden" // Now this is safe because it's linked via 'htmlFor'
+                  accept="image/*"
+                />
               </div>
             </div>
+
           </div>
 
           {/* Description */}
@@ -182,7 +192,7 @@ const AddClass = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-4 bg-[#0F172A] hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest transition-all shadow-lg shadow-slate-200 active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-4 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest transition-all shadow-lg shadow-slate-200 active:scale-95 flex items-center justify-center gap-2"
           >
             <FaPlusCircle />
             Add Class
