@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { FaStar, FaUsers, FaClock, FaArrowRight, FaRegHeart } from 'react-icons/fa';
@@ -12,14 +12,16 @@ import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import CourseModal from '../../CourseModal/CourseModal';
 
 const PopularCourses = () => {
     const axiosPublic = useAxiosPublic();
-  
-    
-    
+    const [selectedCourse, setSelectedCourse] = useState(null);
 
-    const {data: popularCourses = [], isLoading, refetch} = useQuery({
+
+
+
+    const { data: popularCourses = [], isLoading, refetch } = useQuery({
         queryKey: ["popularCourses"],
         queryFn: async () => {
             const res = await axiosPublic.get("/classes");
@@ -31,7 +33,7 @@ const PopularCourses = () => {
     return (
         <section className="py-5">
             <div className="container mx-auto px-6">
-                
+
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
                     <div className="max-w-xl">
@@ -43,7 +45,7 @@ const PopularCourses = () => {
                         </p>
                     </div>
                     <button className="text-cyan-600 font-bold text-sm flex items-center gap-2 hover:underline">
-                        Explore all <FaArrowRight className="text-xs"/>
+                        Explore all <FaArrowRight className="text-xs" />
                     </button>
                 </div>
 
@@ -64,7 +66,7 @@ const PopularCourses = () => {
                     {popularCourses.map((popularCourse) => (
                         <SwiperSlide key={popularCourse.id}>
                             <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all group h-full flex flex-col">
-                                
+
                                 {/* Shorter Image Container */}
                                 <div className="relative h-40 w-full bg-slate-50 overflow-hidden">
                                     <div className="absolute top-3 left-3 z-10 bg-cyan-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-tighter">
@@ -73,12 +75,12 @@ const PopularCourses = () => {
                                     <button className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors">
                                         <FaRegHeart size={14} />
                                     </button>
-                                    
+
                                     {/* FIX: object-contain ensures the image is not zoomed/cropped */}
-                                    <img 
-                                        src={popularCourse.image} 
-                                        alt={popularCourse.title} 
-                                        className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" 
+                                    <img
+                                        src={popularCourse.image}
+                                        alt={popularCourse.title}
+                                        className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500"
                                     />
                                 </div>
 
@@ -112,7 +114,10 @@ const PopularCourses = () => {
                                     {/* Card Footer */}
                                     <div className="mt-auto pt-3 border-t border-gray-50 flex items-center justify-between">
                                         <span className="text-lg font-black text-slate-900">{popularCourse.price}</span>
-                                        <button className="bg-slate-900 hover:bg-cyan-500 text-white px-4 py-1.5 rounded-lg transition-colors text-xs font-bold">
+                                        <button
+                                            onClick={() => setSelectedCourse(popularCourse)}
+                                            className="bg-slate-900 hover:bg-cyan-500 text-white px-4 py-1.5 rounded-lg transition-colors text-xs font-bold"
+                                        >
                                             Enroll Now
                                         </button>
                                     </div>
@@ -121,6 +126,12 @@ const PopularCourses = () => {
                         </SwiperSlide>
                     ))}
                 </Swiper>
+
+                {/* MODAL IS PLACED HERE - Rendered only when a course is selected */}
+                <CourseModal
+                    course={selectedCourse}
+                    onClose={() => setSelectedCourse(null)}
+                />
             </div>
 
             {/* Pagination Style Overwrite */}

@@ -70,7 +70,7 @@ const Banner = () => {
                                             <span className="text-xs font-bold text-white lg:text-slate-600 uppercase tracking-widest">{slide.tag}</span>
                                         </div>
 
-                                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white lg:text-slate-900 leading-[1.1]">
+                                        <h1 className="text-4xl md:text-5xl  font-extrabold text-white lg:text-slate-900 leading-[1.1]">
                                             {slide.title.split(' ').slice(0, -2).join(' ')} <br />
                                             <span className="bg-gradient-to-r from-cyan-400 to-blue-400 lg:from-cyan-500 lg:to-blue-600 bg-clip-text text-transparent">
                                                 {slide.title.split(' ').slice(-2).join(' ')}
