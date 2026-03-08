@@ -46,7 +46,7 @@ const AuthProvider = ({ children }) => {
             if (currentUser?.email) {
                 // 1. Fetch User Data from MongoDB
                 // Make sure the URL matches your backend route precisely
-                axios.get(`http://localhost:5008/users/${currentUser.email}`)
+                axios.get(`https://eduflow-server-ten.vercel.app/users/${currentUser.email}`)
                     .then(res => {
                         setDbUser(res.data);
                         // CRITICAL: Only stop loading after we have the data

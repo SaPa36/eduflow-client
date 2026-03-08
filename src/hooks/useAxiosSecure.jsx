@@ -4,7 +4,7 @@ import { AuthContext } from '../providers/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
 export const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5008',
+    baseURL: 'https://eduflow-server-ten.vercel.app',
     // You can add any default headers or configurations here
 });
 

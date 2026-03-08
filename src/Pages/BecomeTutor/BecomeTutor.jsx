@@ -69,6 +69,7 @@ const BecomeTutor = () => {
                             text: "Your teacher request has been deleted.",
                             icon: "success",
                         });
+                        refetch();
                     }
                 } catch (error) {
                     console.error("Deletion error", error);
