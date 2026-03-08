@@ -35,10 +35,10 @@ const Navbar = () => {
             </li>
             <li>
                 <NavLink
-                    to="/courses"
+                    to="/all-courses"
                     className={({ isActive }) => (isActive ? activeLink : normalLink)}
                 >
-                    Courses
+                    All Courses
                 </NavLink>
             </li>
             <li>

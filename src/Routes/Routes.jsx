@@ -16,6 +16,7 @@ import AddClass from "../Pages/DashBoard/AddClas/AddClass";
 import MyClass from "../Pages/DashBoard/MyClass/MyClass";
 import TeacherRoutes from "./TeacherRoutes";
 import ManageClasses from "../Pages/DashBoard/ManageClasses/ManageClasses";
+import AllCourses from "../Pages/AllCourses/AllCourses";
 
 
 export const router = createBrowserRouter([
@@ -36,7 +37,11 @@ export const router = createBrowserRouter([
         element: <Register></Register>
       },
       {
-        path: "become-tutor",
+        path: "/all-courses",
+        element: <AllCourses></AllCourses>
+      },
+      {
+        path: "/become-tutor",
         element: <PrivateRoutes><BecomeTutor></BecomeTutor></PrivateRoutes>
       }
       
