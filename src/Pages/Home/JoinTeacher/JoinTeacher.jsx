@@ -72,7 +72,7 @@ const JoinTeacher = () => {
                         {/* Button with Redirection */}
                         <div className="">
                             <button 
-                                onClick={() => navigate('/teach-on-eduflow')}
+                                onClick={() => navigate('/become-tutor')}
                                 className="px-10 py-5 bg-slate-900 text-white font-bold rounded-2xl shadow-xl shadow-slate-200 hover:bg-cyan-600 hover:shadow-cyan-500/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-3"
                             >
                                 Start Teaching Today

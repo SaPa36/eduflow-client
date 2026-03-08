@@ -45,9 +45,9 @@ const DashBoard = () => {
                     <ul className="space-y-1">
                         {role === 'admin' && (
                             <>
-                                <li>
-                                    <NavLink to="/dashboard/all-classes" className={navLinkClass}>
-                                        <FaLayerGroup size={16} /> <span>All Classes</span>
+                               <li>
+                                    <NavLink to="/dashboard/manage-classes" className={navLinkClass}>
+                                        <FaLayerGroup size={16} /> <span>Manage All Classes</span>
                                     </NavLink>
                                 </li>
 
@@ -62,11 +62,7 @@ const DashBoard = () => {
                                         <FaUsers size={16} /> <span>Manage Users</span>
                                     </NavLink>
                                 </li>
-                                <li>
-                                    <NavLink to="/dashboard/manage-classes" className={navLinkClass}>
-                                        <SiGoogleclassroom size={16} /> <span>Manage Classes</span>
-                                    </NavLink>
-                                </li>
+                                
                             </>
                         )}
 

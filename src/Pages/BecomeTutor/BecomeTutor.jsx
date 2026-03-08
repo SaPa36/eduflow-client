@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import AlreadyTeacherView from "../AlreadyTeacherView/AlreadyTeacherView";
+import AdminBecomeTutorView from "../AdminBecomeTutorView/AdminBecomeTutorView";
 
 const BecomeTutor = () => {
     const { user, dbUser } = useContext(AuthContext);
@@ -40,6 +41,12 @@ const BecomeTutor = () => {
     if (dbUser?.role === 'teacher') {
         return (
             <AlreadyTeacherView />
+        );
+    }
+
+    if (dbUser?.role === 'admin') {
+        return (
+            <AdminBecomeTutorView />
         );
     }
 
