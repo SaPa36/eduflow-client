@@ -5,11 +5,22 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import AlreadyTeacherView from "../AlreadyTeacherView/AlreadyTeacherView";
 import AdminBecomeTutorView from "../AdminBecomeTutorView/AdminBecomeTutorView";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 const BecomeTutor = () => {
     const { user, dbUser } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, reset } = useForm();
+
+
+    const { data: request, refetch } = useQuery({
+        queryKey: ['my-teacher-request', user?.email],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/teachers-requests/${user.email}`);
+            return res.data;
+        }
+    });
 
     const onSubmit = async (data) => {
         const application = {
@@ -32,10 +43,39 @@ const BecomeTutor = () => {
                     confirmButtonColor: "#22D3EE" // Cyan-400
                 });
                 reset();
+                refetch();
             }
         } catch (error) {
             console.error("Submission error", error);
         }
+    };
+
+    const handleDelete = async (request) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: `You are about to delete your teacher request. This action cannot be undone!`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await axiosSecure.delete(`/teachers-requests/${request._id}`);
+                    if (res.data.deletedCount > 0) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your teacher request has been deleted.",
+                            icon: "success",
+                        });
+                    }
+                } catch (error) {
+                    console.error("Deletion error", error);
+                }
+            }
+        }
+        );
     };
 
     if (dbUser?.role === 'teacher') {
@@ -47,6 +87,36 @@ const BecomeTutor = () => {
     if (dbUser?.role === 'admin') {
         return (
             <AdminBecomeTutorView />
+        );
+    }
+
+    if (request && request.status !== 'approved') {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 pt-32 px-4">
+                <div className="bg-white p-10 rounded-3xl shadow-xl text-center max-w-lg w-full border border-slate-100">
+                    {request.status === 'pending' ? (
+                        <>
+                            <h2 className="text-3xl font-bold mb-4 text-slate-900">Application Pending</h2>
+                            <p className="text-slate-500 mb-6">Your application is currently under review by our admin team.</p>
+                        </>
+                    ) : (
+                        <>
+                            <h2 className="text-3xl font-bold mb-4 text-rose-600">Application Rejected</h2>
+                            <p className="text-slate-500 mb-6">Unfortunately, your request was not approved. Please contact support or check your profile requirements.</p>
+                            {/* Option: Add a button here to allow them to delete and retry */}
+                            <Link to="/become-tutor" >
+                                <button
+                                    onClick={() => { handleDelete(request) }}
+                                    className="bg-slate-900 text-white px-6 py-2 rounded-xl"
+                                >
+                                    Delete & Re-apply
+                                </button>
+
+                            </Link>
+                        </>
+                    )}
+                </div>
+            </div>
         );
     }
 
@@ -155,24 +225,26 @@ const BecomeTutor = () => {
                                 </div>
                             </div>
 
-                            <button
-                                type="submit"
-                                className="w-full mt-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500
+                            
+                                <button
+                                    type="submit"
+                                    className="w-full mt-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500
                                  hover:to-blue-600 text-white text-lg font-bold rounded-2xl shadow-xl shadow-cyan-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 group"
-                            >
-                                <span>Submit for Review</span>
-                                {/* Fixed SVG with explicit width/height and stroke color */}
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="white" /* Forced white to ensure visibility */
-                                    strokeWidth={2.5}
                                 >
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                                </svg>
-                            </button>
+                                    <span>Submit for Review</span>
+                                    {/* Fixed SVG with explicit width/height and stroke color */}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="white" /* Forced white to ensure visibility */
+                                        strokeWidth={2.5}
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                                    </svg>
+                                </button>
+                            
                         </form>
                     </div>
                 </div>

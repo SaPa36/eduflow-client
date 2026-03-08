@@ -42,6 +42,8 @@ const ManageClasses = () => {
                 <table className="table w-full ">
                     <thead>
                         <tr className="bg-slate-100 text-slate-500">
+                            <th>#</th>
+                            <th>Class Image</th>
                             <th>Class Info</th>
                             <th>Instructor</th>
                             <th>Status</th>
@@ -51,6 +53,18 @@ const ManageClasses = () => {
                     <tbody>
                         {allClasses.map(cls => (
                             <tr key={cls._id}>
+                                <td>{allClasses.indexOf(cls) + 1}</td>
+                                <td>
+                                    <img
+                                        src={cls.image || "/default-class-image.png"}
+                                        referrerPolicy="no-referrer"
+                                        onError={(e) => {
+                                            e.target.src = "https://ui-avatars.com/api/?name=" + cls.title;
+                                        }}
+                                        className="w-30 h-16 rounded-lg object-cover"
+                                        alt={cls.title}
+                                    />
+                                </td>
                                 <td>
                                     <div className="font-bold ">{cls.title}</div>
                                     <div className="text-xs text-slate-400">${cls.price}</div>

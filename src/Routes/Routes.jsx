@@ -17,6 +17,7 @@ import MyClass from "../Pages/DashBoard/MyClass/MyClass";
 import TeacherRoutes from "./TeacherRoutes";
 import ManageClasses from "../Pages/DashBoard/ManageClasses/ManageClasses";
 import AllCourses from "../Pages/AllCourses/AllCourses";
+import MyRequest from "../Pages/DashBoard/MyRequest/MyRequest";
 
 
 export const router = createBrowserRouter([
@@ -52,6 +53,11 @@ export const router = createBrowserRouter([
     path: "dashboard",
     element: <PrivateRoutes><DashBoard /></PrivateRoutes>, // Protect the whole dashboard
     children: [
+      //student routes
+      {
+        path: "my-requests",
+        element: <PrivateRoutes><MyRequest></MyRequest></PrivateRoutes>
+      },
       // Admin Routes
       { 
         path: "manage-users",

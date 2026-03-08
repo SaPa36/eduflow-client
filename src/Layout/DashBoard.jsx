@@ -82,11 +82,18 @@ const DashBoard = () => {
                         )}
 
                         {role === 'student' && (
+                            <>
                             <li>
                                 <NavLink to="/dashboard/my-enroll-classes" className={navLinkClass}>
                                     <FaGraduationCap size={16} /> <span>Enrolled</span>
                                 </NavLink>
                             </li>
+                            <li>
+                                <NavLink to="/dashboard/my-requests" className={navLinkClass}>
+                                    <FaGraduationCap size={16} /> <span>My Requests</span>
+                                </NavLink>
+                            </li>
+                            </>
                         )}
                     </ul>
 

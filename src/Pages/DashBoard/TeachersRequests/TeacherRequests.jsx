@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { FaUserShield, FaChalkboardTeacher } from "react-icons/fa";
+import { FaUserShield, FaChalkboardTeacher, FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { AuthContext } from "../../../providers/AuthProvider";
@@ -47,21 +47,23 @@ const TeachersRequests = () => {
   };
 
   const handleReject = async (request) => {
-    const res = await axiosSecure.patch(`/teachers-requests/reject/${request._id}`);
+    const res = await axiosSecure.patch(`/teachers-requests/reject/${request._id}`, {
+        email: request.email // Send the email here!
+    });
 
-    // With the change above, res.data.requestResult will now exist
-    if (res.data.requestResult?.modifiedCount > 0) {
+    if (res.data.requestResult?.modifiedCount > 0 || res.data.userResult?.modifiedCount > 0) {
       refetch();
       Swal.fire({
         icon: "error",
         title: "Teacher Rejected",
-        text: `${request.name}'s request has been rejected.`,
+        text: `${request.name} is now demoted to student.`,
         showConfirmButton: false,
         timer: 1500,
       });
     }
-  };
+};
 
+  
   if (isLoading)
     return <span className="loading loading-dots loading-lg"></span>;
 
@@ -128,8 +130,8 @@ const TeachersRequests = () => {
               <td>
                 <span
                   className={`badge border-none font-bold text-[10px] ${request.status === "approved"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-yellow-100 text-yellow-600"
+                    ? "bg-green-100 text-green-600"
+                    : "bg-yellow-100 text-yellow-600"
                     }`}
                 >
                   {request.status}
@@ -141,18 +143,20 @@ const TeachersRequests = () => {
                 <div className="flex justify-end gap-2">
                   <button
                     onClick={() => handleApprove(request)}
-                    disabled={request.status !== "pending"}
+                    disabled={request.status === "rejected" || request.status === "approved"}
                     className="px-4 py-2 bg-[#0F172A] hover:bg-black disabled:bg-slate-200 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-slate-200 active:scale-95"
                   >
                     Approve
                   </button>
                   <button
                     onClick={() => handleReject(request)}
-                    disabled={request.status !== "pending"}
+                    disabled={request.status === "rejected"}
                     className="px-4 py-2 bg-white border border-rose-200 text-rose-500 hover:bg-red-900 disabled:opacity-30 text-xs font-bold rounded-xl transition-all"
                   >
                     Reject
                   </button>
+
+                  
                 </div>
               </td>
             </tr>
