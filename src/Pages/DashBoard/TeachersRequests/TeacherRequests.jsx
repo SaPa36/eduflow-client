@@ -46,6 +46,22 @@ const TeachersRequests = () => {
     }
   };
 
+  const handleReject = async (request) => {
+    const res = await axiosSecure.patch(`/teachers-requests/reject/${request._id}`);
+
+    // With the change above, res.data.requestResult will now exist
+    if (res.data.requestResult?.modifiedCount > 0) {
+      refetch();
+      Swal.fire({
+        icon: "error",
+        title: "Teacher Rejected",
+        text: `${request.name}'s request has been rejected.`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
   if (isLoading)
     return <span className="loading loading-dots loading-lg"></span>;
 
@@ -111,11 +127,10 @@ const TeachersRequests = () => {
 
               <td>
                 <span
-                  className={`badge border-none font-bold text-[10px] ${
-                    request.status === "approved"
+                  className={`badge border-none font-bold text-[10px] ${request.status === "approved"
                       ? "bg-green-100 text-green-600"
                       : "bg-yellow-100 text-yellow-600"
-                  }`}
+                    }`}
                 >
                   {request.status}
                 </span>
@@ -132,6 +147,7 @@ const TeachersRequests = () => {
                     Approve
                   </button>
                   <button
+                    onClick={() => handleReject(request)}
                     disabled={request.status !== "pending"}
                     className="px-4 py-2 bg-white border border-rose-200 text-rose-500 hover:bg-red-900 disabled:opacity-30 text-xs font-bold rounded-xl transition-all"
                   >
