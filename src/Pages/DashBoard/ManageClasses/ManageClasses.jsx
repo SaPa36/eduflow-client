@@ -52,7 +52,7 @@ const ManageClasses = () => {
                         {allClasses.map(cls => (
                             <tr key={cls._id}>
                                 <td>
-                                    <div className="font-bold">{cls.title}</div>
+                                    <div className="font-bold ">{cls.title}</div>
                                     <div className="text-xs text-slate-400">${cls.price}</div>
                                 </td>
                                 <td>

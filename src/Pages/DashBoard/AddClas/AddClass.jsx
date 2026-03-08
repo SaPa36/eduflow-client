@@ -60,7 +60,7 @@ const AddClass = () => {
 
   return (
     <div className="min-h-screen   ">
-      <div className="max-w-3xl mx-auto bg-white rounded-[2rem] shadow-sm border border-slate-200 p-8 md:p-12">
+      <div className="max-w-3xl mx-auto bg-white rounded-[2rem] shadow-2xl shadow-cyan-300 border border-slate-200 p-8 ">
         <div className="flex justify-between">
           <div className="mb-7">
             <h2 className="text-3xl font-black text-[#0F172A]">
@@ -108,12 +108,12 @@ const AddClass = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Class Title */}
           <div className="form-control">
-            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
+            <label className="text-xs font-bold  uppercase tracking-widest mb-2 ml-1">
               Class Title
             </label>
             <input
               {...register("title", { required: true })}
-              className="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#22D3EE] focus:ring-1 focus:ring-[#22D3EE] outline-none transition-all font-semibold"
+              className="w-full px-5 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:border-[#22D3EE] focus:ring-1 focus:ring-[#22D3EE] outline-none transition-all font-semibold"
               placeholder="e.g. Modern JavaScript Masterclass"
             />
           </div>
@@ -121,25 +121,25 @@ const AddClass = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
             {/* Price */}
             <div className="form-control">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
+              <label className="text-xs font-bold  uppercase tracking-widest mb-2 ml-1">
                 Price ($)
               </label>
               <input
                 type="number"
                 {...register("price", { required: true })}
-                className="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#22D3EE] outline-none font-semibold"
+                className="w-full px-5 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:border-[#22D3EE] outline-none font-semibold"
                 placeholder="0.00"
               />
             </div>
 
             {/* Image Upload with Small Integrated Preview */}
             <div className="form-control">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
+              <label className="text-xs font-bold  uppercase tracking-widest mb-2 ml-1">
                 Class Image
               </label>
-              <div className="flex items-center gap-4 p-2 bg-slate-50 border border-slate-200 rounded-xl">
+              <div className="flex items-center gap-4 p-2 bg-slate-50 border border-slate-300 rounded-xl">
                 {/* Small Preview Box */}
-                <div className="w-14 h-14 bg-white border border-slate-200 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
+                <div className="w-14 h-14 bg-white border border-slate-300 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
                   {preview ? (
                     <img
                       src={preview}
@@ -154,7 +154,7 @@ const AddClass = () => {
                 {/* The Styled Button (Label) */}
                 <label
                   htmlFor="file-upload"
-                  className="flex-grow text-center py-2 bg-white border border-slate-200 hover:border-cyan-300 hover:text-cyan-500 rounded-lg cursor-pointer transition-all text-sm font-bold text-slate-600"
+                  className="flex-grow text-center py-2 bg-white border border-slate-300 hover:border-cyan-300 hover:text-cyan-500 rounded-lg cursor-pointer transition-all text-sm font-bold text-slate-600"
                 >
                   {preview ? "Change Photo" : "Choose File"}
                 </label>
@@ -178,13 +178,13 @@ const AddClass = () => {
 
           {/* Description */}
           <div className="form-control">
-            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
+            <label className="text-xs font-bold  uppercase tracking-widest mb-2 ml-1">
               Description
             </label>
             <textarea
               {...register("description", { required: true })}
               rows="4"
-              className="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#22D3EE] outline-none transition-all resize-none"
+              className="w-full px-5 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:border-[#22D3EE] outline-none transition-all resize-none"
               placeholder="Provide a brief overview of the course..."
             ></textarea>
           </div>

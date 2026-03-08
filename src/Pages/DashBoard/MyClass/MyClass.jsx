@@ -28,32 +28,32 @@ const MyClass = () => {
   // 2. Delete Mutation
   const handleDelete = (id) => {
     Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
     }).then((result) => {
-        if (result.isConfirmed) {
-            // Using plural /users/ to match the GET request
-            axiosSecure.delete(`/classes/${id}`)
-                .then(res => {
-                    if (res.data.deletedCount > 0) {
-                        refetch(); // Now refetch is in scope
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "User has been removed.",
-                            icon: "success"
-                        });
-                    }
-                })
-                .catch(error => console.log(error));
-        }
-        
+      if (result.isConfirmed) {
+        // Using plural /users/ to match the GET request
+        axiosSecure.delete(`/classes/${id}`)
+          .then(res => {
+            if (res.data.deletedCount > 0) {
+              refetch(); // Now refetch is in scope
+              Swal.fire({
+                title: "Deleted!",
+                text: "User has been removed.",
+                icon: "success"
+              });
+            }
+          })
+          .catch(error => console.log(error));
+      }
+
     });
-    };
+  };
 
   if (isLoading)
     return (
@@ -63,12 +63,12 @@ const MyClass = () => {
     );
 
   return (
-    <div className="p-6 bg-[#F8FAFC] min-h-screen">
+    <div className=" bg-[#F8FAFC] min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-4">
           <div>
-            <h2 className="text-4xl font-black text-[#0F172A]">
+            <h2 className="text-3xl font-black text-[#0F172A]">
               My <span className="text-cyan-500">Classes</span>
             </h2>
             <p className="text-slate-500 font-medium">
@@ -112,16 +112,16 @@ const MyClass = () => {
                     key={cls._id}
                     className="hover:bg-slate-50/50 transition-colors border-b border-slate-50 last:border-none"
                   >
-                    <td className="py-5 pl-8">
+                    <td className="py-2 pl-8">
                       <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 flex-shrink-0">
+                        <div className="w-12 h-12 rounded-2xl overflow-hidden border border-slate-100 flex-shrink-0">
                           <img
                             src={cls.image}
                             alt=""
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <div className="font-bold text-[#0F172A] text-lg">
+                        <div className="font-bold text-[#0F172A] text-sm">
                           {cls.title}
                         </div>
                       </div>
@@ -138,13 +138,12 @@ const MyClass = () => {
                     <td className="text-center">
                       <span
                         className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest 
-                                                ${
-                                                  cls.status === "approved"
-                                                    ? "bg-emerald-100 text-emerald-600"
-                                                    : cls.status === "pending"
-                                                    ? "bg-amber-100 text-amber-600"
-                                                    : "bg-rose-100 text-rose-600"
-                                                }`}
+                                                ${cls.status === "approved"
+                            ? "bg-emerald-100 text-emerald-600"
+                            : cls.status === "pending"
+                              ? "bg-amber-100 text-amber-600"
+                              : "bg-rose-100 text-rose-600"
+                          }`}
                       >
                         {cls.status}
                       </span>

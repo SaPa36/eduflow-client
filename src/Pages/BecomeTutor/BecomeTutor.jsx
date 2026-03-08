@@ -3,9 +3,10 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import AlreadyTeacherView from "../AlreadyTeacherView/AlreadyTeacherView";
 
 const BecomeTutor = () => {
-    const { user } = useContext(AuthContext);
+    const { user, dbUser } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, reset } = useForm();
 
@@ -35,6 +36,12 @@ const BecomeTutor = () => {
             console.error("Submission error", error);
         }
     };
+
+    if (dbUser?.role === 'teacher') {
+        return (
+            <AlreadyTeacherView />
+        );
+    }
 
     return (
         /* pt-24 ensures the content starts below your fixed navbar */
@@ -73,7 +80,7 @@ const BecomeTutor = () => {
                         <div className="md:flex justify-between">
                             <header className="mb-5">
                                 <h3 className="text-3xl pt-5 font-bold text-slate-900 tracking-tight">Apply for
-                                    <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Teaching</span>
+                                    <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> Teaching</span>
                                 </h3>
                                 <div className="h-1 w-20 bg-cyan-400 mt-2 rounded-full"></div>
                             </header>
@@ -143,7 +150,8 @@ const BecomeTutor = () => {
 
                             <button
                                 type="submit"
-                                className="w-full mt-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white text-lg font-bold rounded-2xl shadow-xl shadow-cyan-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 group"
+                                className="w-full mt-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500
+                                 hover:to-blue-600 text-white text-lg font-bold rounded-2xl shadow-xl shadow-cyan-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 group"
                             >
                                 <span>Submit for Review</span>
                                 {/* Fixed SVG with explicit width/height and stroke color */}
