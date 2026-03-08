@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { FaUserShield, FaChalkboardTeacher } from "react-icons/fa";
+import { FaUserShield, FaChalkboardTeacher, FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { AuthContext } from "../../../providers/AuthProvider";
@@ -41,6 +41,33 @@ const ManageUsers = () => {
       })
       .catch((error) => console.log(error));
   };
+
+  const handleDelete = (user) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to delete ${user.name}. This action cannot be undone!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/users/${user._id}`)
+          .then((res) => {
+            if (res.data.deletedCount > 0) {
+              refetch(); // Refetch to get the updated user list
+              Swal.fire({
+                title: "Deleted!",
+                text: `${user.name} has been deleted.`,
+                icon: "success",
+              });
+            }
+          })
+          .catch((error) => console.log(error));
+      }
+    });
+  }
 
   if (isLoading)
     return <span className="loading loading-dots loading-lg"></span>;
@@ -103,18 +130,17 @@ const ManageUsers = () => {
                 <button
                   onClick={() => handleMakeAdmin(user)}
                   disabled={user.role === "admin"}
-                  className="btn btn-sm bg-orange-500 hover:bg-orange-600 text-white border-none tooltip"
+                  className="btn btn-sm bg-cyan-500 hover:bg-cyan-600 text-white border-none tooltip"
                   data-tip="Make Admin"
                 >
                   <FaUserShield />
                 </button>
                 <button
-                  onClick={() => handleMakeTeacher(user)}
-                  disabled={user.role === "teacher"}
-                  className="btn btn-sm bg-cyan-500 hover:bg-cyan-600 text-white border-none tooltip"
-                  data-tip="Make Teacher"
+                  onClick={() => handleDelete(user)}
+                  className="btn btn-sm bg-rose-500 hover:bg-rose-600 text-white border-none tooltip"
+                  data-tip="Delete User"
                 >
-                  <FaChalkboardTeacher />
+                  <FaTimes />
                 </button>
               </td>
             </tr>
