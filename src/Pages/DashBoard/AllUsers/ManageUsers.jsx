@@ -5,6 +5,8 @@ import { FaUserShield, FaChalkboardTeacher, FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { AuthContext } from "../../../providers/AuthProvider";
+import Pagination from "../Pagination/Pagination";
+import usePagination from "../../../hooks/usePagination";
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -69,6 +71,8 @@ const ManageUsers = () => {
     });
   }
 
+  const { currentItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(users, 10);
+
   if (isLoading)
     return <span className="loading loading-dots loading-lg"></span>;
 
@@ -88,9 +92,9 @@ const ManageUsers = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
+          {currentItems.map((user, index) => (
             <tr key={user._id} className="hover:bg-slate-50 transition-colors">
-              <th>{index + 1}</th>
+              <th>{index + 1 + (currentPage - 1) * itemsPerPage}</th>
               <td>
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -106,7 +110,7 @@ const ManageUsers = () => {
                         className="w-14 h-14 rounded-2xl object-cover"
                         alt=""
                       />
-                      
+
                     </div>
                   </div>
                   <div className="font-bold">{user.name}</div>
@@ -115,13 +119,12 @@ const ManageUsers = () => {
               <td>{user.email}</td>
               <td>
                 <span
-                  className={`badge border-none font-bold text-[10px] ${
-                    user.role === "admin"
+                  className={`badge border-none font-bold text-[10px] ${user.role === "admin"
                       ? "bg-red-100 text-red-600"
                       : user.role === "teacher"
-                      ? "bg-blue-100 text-blue-600"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
+                        ? "bg-blue-100 text-blue-600"
+                        : "bg-gray-100 text-gray-600"
+                    }`}
                 >
                   {user.role}
                 </span>
@@ -147,6 +150,14 @@ const ManageUsers = () => {
           ))}
         </tbody>
       </table>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 };

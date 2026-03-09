@@ -3,10 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { FaCheckCircle, FaTimesCircle, FaTrashAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import Pagination from '../Pagination/Pagination';
+import usePagination from '../../../hooks/usePagination';
 
 const ManageClasses = () => {
     const axiosSecure = useAxiosSecure();
     const getStatus = (status) => status?.trim().toLowerCase();
+
 
     // Fetch all classes regardless of email
     const { data: allClasses = [], isLoading, refetch } = useQuery({
@@ -32,38 +35,16 @@ const ManageClasses = () => {
             });
     };
 
-    const handleDelete = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axiosSecure.delete(`/classes/admin/${id}`)
-                    .then(res => {
-                        if (res.data.deletedCount > 0) {
-                            refetch();
-                            Swal.fire(
-                                'Deleted!',
-                                'The class has been deleted.',
-                                'success'
-                            );
-                        }
-                    });
-            }
-        });
-    }
+    const { currentItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(allClasses, 10);
+
+
 
     if (isLoading) return <div className="text-center py-20">Loading...</div>;
 
     return (
         <div className=" bg-slate-50 min-h-screen">
-            <h2 className="text-3xl font-black mb-5 text-slate-800">Manage 
-             <span className='bg-gradient-to-r from-cyan-400 to-blue-400
+            <h2 className="text-3xl font-black mb-5 text-slate-800">Manage
+                <span className='bg-gradient-to-r from-cyan-400 to-blue-400
                       lg:from-cyan-500 lg:to-blue-600 bg-clip-text text-transparent'> All Classes    </span></h2>
             <div className="bg-white overflow-x-auto rounded-3xl shadow-sm border border-slate-100 ">
                 <table className="table w-full ">
@@ -78,9 +59,13 @@ const ManageClasses = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {allClasses.map(cls => (
+                        {currentItems.map((cls, index) => (
                             <tr key={cls._id}>
-                                <td>{allClasses.indexOf(cls) + 1}</td>
+                                {/* Index math ensures numbering remains correct across pages */}
+                                <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+
+
+                                <td>{currentItems.indexOf(cls) + 1}</td>
                                 <td>
                                     <img
                                         src={cls.image || "/default-class-image.png"}
@@ -107,7 +92,7 @@ const ManageClasses = () => {
                                 </td>
                                 <td className="text-center">
                                     <div className="flex justify-center gap-2">
-                                        <button 
+                                        <button
                                             disabled={getStatus(cls.status) === 'approved' || getStatus(cls.status) === 'rejected'}
                                             onClick={() => handleStatusUpdate(cls._id, 'approved')}
                                             className="p-2 text-green-500 hover:bg-green-50 rounded-lg
@@ -115,7 +100,7 @@ const ManageClasses = () => {
                                         >
                                             <FaCheckCircle size={20} />
                                         </button>
-                                        <button 
+                                        <button
                                             disabled={getStatus(cls.status) === 'rejected' || getStatus(cls.status) === 'approved'}
                                             onClick={() => handleStatusUpdate(cls._id, 'rejected')}
                                             className="p-2 text-red-500 hover:bg-red-50 rounded-lg
@@ -123,22 +108,23 @@ const ManageClasses = () => {
                                         >
                                             <FaTimesCircle size={20} />
                                         </button>
-                                        {/* delete button */}
-                                        <button 
-                                            onClick={() => handleDelete(cls._id)}
-                                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg
-                                            disabled:text-slate-300 disabled:hover:bg-transparent disabled:cursor-not-allowed"
-                                        >
-                                            <FaTrashAlt size={20} />
-                                        </button>
+
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+
+                {totalPages > 1 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                )}
             </div>
-        </div>
+        </div >
     );
 };
 

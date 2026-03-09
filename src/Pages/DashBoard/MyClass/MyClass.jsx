@@ -5,6 +5,9 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaEdit, FaTrashAlt, FaUsers } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import usePagination from "../../../hooks/usePagination";
+import Pagination from "../Pagination/Pagination";
+
 
 const MyClass = () => {
   const { user } = useContext(AuthContext);
@@ -55,6 +58,8 @@ const MyClass = () => {
     });
   };
 
+  const { currentItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(classes, 10);
+
   if (isLoading)
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -89,6 +94,7 @@ const MyClass = () => {
             <table className="table w-full border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
+                  <th>#</th>
                   <th className="py-5 pl-8 text-xs font-bold uppercase tracking-wider text-slate-500">
                     Class Info
                   </th>
@@ -107,11 +113,15 @@ const MyClass = () => {
                 </tr>
               </thead>
               <tbody>
-                {classes.map((cls) => (
+                {currentItems.map((cls, index) => (
                   <tr
                     key={cls._id}
                     className="hover:bg-slate-50/50 transition-colors border-b border-slate-50 last:border-none"
                   >
+                    <td className="py-2 pl-4 text-sm text-slate-500">
+                      {index + 1 + (currentPage - 1) * itemsPerPage}
+                    </td>
+
                     <td className="py-2 pl-8">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-2xl overflow-hidden border border-slate-100 flex-shrink-0">
@@ -172,6 +182,14 @@ const MyClass = () => {
                 ))}
               </tbody>
             </table>
+
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -5,6 +5,9 @@ import { FaUserShield, FaChalkboardTeacher, FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { AuthContext } from "../../../providers/AuthProvider";
+import usePagination from "../../../hooks/usePagination";
+import Pagination from "../Pagination/Pagination";
+
 
 const TeachersRequests = () => {
   const axiosSecure = useAxiosSecure();
@@ -48,7 +51,7 @@ const TeachersRequests = () => {
 
   const handleReject = async (request) => {
     const res = await axiosSecure.patch(`/teachers-requests/reject/${request._id}`, {
-        email: request.email // Send the email here!
+      email: request.email // Send the email here!
     });
 
     if (res.data.requestResult?.modifiedCount > 0 || res.data.userResult?.modifiedCount > 0) {
@@ -61,9 +64,11 @@ const TeachersRequests = () => {
         timer: 1500,
       });
     }
-};
+  };
 
-  
+  const { currentItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(requests, 10);
+
+
   if (isLoading)
     return <span className="loading loading-dots loading-lg"></span>;
 
@@ -84,7 +89,7 @@ const TeachersRequests = () => {
           </tr>
         </thead>
         <tbody>
-          {requests.map((request, index) => (
+          {currentItems.map((request, index) => (
             <tr
               key={request._id}
               className="hover:bg-slate-50 transition-colors"
@@ -156,13 +161,21 @@ const TeachersRequests = () => {
                     Reject
                   </button>
 
-                  
+
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 };
