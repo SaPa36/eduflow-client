@@ -18,6 +18,7 @@ import TeacherRoutes from "./TeacherRoutes";
 import ManageClasses from "../Pages/DashBoard/ManageClasses/ManageClasses";
 import AllCourses from "../Pages/AllCourses/AllCourses";
 import MyRequest from "../Pages/DashBoard/MyRequest/MyRequest";
+import Enrolled from "../Pages/DashBoard/Enrolled/Enrolled";
 
 
 
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
       {
         path: "my-requests",
         element: <PrivateRoutes><MyRequest></MyRequest></PrivateRoutes>
+      },
+      {
+        path: "my-enroll-classes",
+        element: <PrivateRoutes><Enrolled></Enrolled></PrivateRoutes>
       },
       
       // Admin Routes
