@@ -12,6 +12,7 @@ const BecomeTutor = () => {
     const { user, dbUser } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, reset } = useForm();
+    
 
 
     const { data: request, refetch } = useQuery({
@@ -24,9 +25,9 @@ const BecomeTutor = () => {
 
     const onSubmit = async (data) => {
         const application = {
-            name: user?.displayName,
-            email: user?.email,
-            image: user?.photoURL,
+            name: dbUser?.name,
+            email: dbUser?.email,
+            image: dbUser?.image,
             experience: data.experience,
             title: data.title,
             category: data.category,
@@ -167,7 +168,7 @@ const BecomeTutor = () => {
                             <div className="flex items-center gap-5  bg-slate-50 rounded-2xl border border-slate-100 group transition-all hover:border-cyan-100 hover:bg-cyan-50/30">
                                 <div className="relative">
                                     <img
-                                        src={user?.photoURL || "https://i.ibb.co/mJR9n1S/default-avatar.png"}
+                                        src={dbUser?.image || "https://i.ibb.co/mJR9n1S/default-avatar.png"}
                                         alt="Profile"
                                         className="w-16 h-16 rounded-full border-4 border-white shadow-md object-cover"
                                     />
@@ -175,8 +176,8 @@ const BecomeTutor = () => {
                                 </div>
                                 <div>
                                     <span className="text-[10px] font-black text-cyan-600 uppercase tracking-widest bg-cyan-100 px-2 py-0.5 rounded-md">Applicant</span>
-                                    <h4 className="font-bold text-slate-900 text-lg mt-1">{user?.displayName}</h4>
-                                    <p className="text-sm text-slate-500 font-medium">{user?.email}</p>
+                                    <h4 className="font-bold text-slate-900 text-lg mt-1">{dbUser?.name}</h4>
+                                    <p className="text-sm text-slate-500 font-medium">{dbUser?.email}</p>
                                 </div>
                             </div>
                         </div>
