@@ -65,7 +65,6 @@ const ManageClasses = () => {
                                 <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
 
 
-                                <td>{currentItems.indexOf(cls) + 1}</td>
                                 <td>
                                     <img
                                         src={cls.image || "/default-class-image.png"}
