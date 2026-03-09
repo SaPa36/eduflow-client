@@ -1,11 +1,12 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaTrashAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const ManageClasses = () => {
     const axiosSecure = useAxiosSecure();
+    const getStatus = (status) => status?.trim().toLowerCase();
 
     // Fetch all classes regardless of email
     const { data: allClasses = [], isLoading, refetch } = useQuery({
@@ -30,6 +31,32 @@ const ManageClasses = () => {
                 }
             });
     };
+
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.delete(`/classes/admin/${id}`)
+                    .then(res => {
+                        if (res.data.deletedCount > 0) {
+                            refetch();
+                            Swal.fire(
+                                'Deleted!',
+                                'The class has been deleted.',
+                                'success'
+                            );
+                        }
+                    });
+            }
+        });
+    }
 
     if (isLoading) return <div className="text-center py-20">Loading...</div>;
 
@@ -81,18 +108,28 @@ const ManageClasses = () => {
                                 <td className="text-center">
                                     <div className="flex justify-center gap-2">
                                         <button 
-                                            disabled={cls.status === 'approved'}
+                                            disabled={getStatus(cls.status) === 'approved' || getStatus(cls.status) === 'rejected'}
                                             onClick={() => handleStatusUpdate(cls._id, 'approved')}
-                                            className="p-2 text-green-500 hover:bg-green-50 rounded-lg"
+                                            className="p-2 text-green-500 hover:bg-green-50 rounded-lg
+                                            disabled:text-slate-300 disabled:hover:bg-transparent disabled:cursor-not-allowed"
                                         >
                                             <FaCheckCircle size={20} />
                                         </button>
                                         <button 
-                                            disabled={cls.status === 'rejected'}
+                                            disabled={getStatus(cls.status) === 'rejected' || getStatus(cls.status) === 'approved'}
                                             onClick={() => handleStatusUpdate(cls._id, 'rejected')}
-                                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg
+                                            disabled:text-slate-300 disabled:hover:bg-transparent disabled:cursor-not-allowed"
                                         >
                                             <FaTimesCircle size={20} />
+                                        </button>
+                                        {/* delete button */}
+                                        <button 
+                                            onClick={() => handleDelete(cls._id)}
+                                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg
+                                            disabled:text-slate-300 disabled:hover:bg-transparent disabled:cursor-not-allowed"
+                                        >
+                                            <FaTrashAlt size={20} />
                                         </button>
                                     </div>
                                 </td>

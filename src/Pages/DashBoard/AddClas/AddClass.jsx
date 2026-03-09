@@ -11,7 +11,7 @@ const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddClass = () => {
-  const { user } = useContext(AuthContext);
+  const { user, dbUser } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic(); // Get a non-authenticated instance for public API calls
   const navigate = useNavigate();
@@ -35,8 +35,8 @@ const AddClass = () => {
 
     const classInfo = {
       title: data.title,
-      name: user?.displayName,
-      email: user?.email,
+      name: dbUser?.name,
+      email: dbUser?.email,
       price: parseFloat(data.price),
       description: data.description,
       image: imageUrl,
@@ -83,7 +83,7 @@ const AddClass = () => {
             <div className="relative">
               <img
                 src={
-                  user?.photoURL ||
+                  dbUser?.image ||
                   "https://i.ibb.co/mJR9n1S/default-avatar.png"
                 }
                 alt="Profile"
@@ -96,10 +96,10 @@ const AddClass = () => {
                 Instructor
               </span>
               <h4 className="font-bold text-slate-900 text-lg mt-1">
-                {user?.displayName}
+                {dbUser?.name}
               </h4>
               <p className="text-sm text-slate-500 font-medium">
-                {user?.email}
+                {dbUser?.email}
               </p>
             </div>
           </div>
@@ -126,6 +126,7 @@ const AddClass = () => {
               </label>
               <input
                 type="number"
+                step="0.01"
                 {...register("price", { required: true })}
                 className="w-full px-5 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:border-[#22D3EE] outline-none font-semibold"
                 placeholder="0.00"
