@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { FaUsers, FaStar, FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import CourseModal from '../CourseModal/CourseModal';
+import { Link } from 'react-router-dom';
 
 const AllCourses = () => {
     const axiosPublic = useAxiosPublic();
@@ -61,12 +62,14 @@ const AllCourses = () => {
                                     <div className="flex items-center gap-1 text-slate-500 text-xs">
                                         <FaUsers /> <span>{course.total_enrolment || 0} Students</span>
                                     </div>
-                                    <button 
-                                        onClick={() => setSelectedCourse(course)} 
-                                        className="bg-slate-900 hover:bg-cyan-600 text-white px-4 py-1.5 rounded-lg transition-colors text-xs font-bold"
-                                    >
-                                        Enroll Now
-                                    </button>
+                                    
+                                        <button
+                                            onClick={() => setSelectedCourse(course)}
+                                            className="bg-slate-900 hover:bg-cyan-600 text-white px-4 py-1.5 rounded-lg transition-colors text-xs font-bold"
+                                        >
+                                            Enroll Now
+                                        </button>
+                                    
                                 </div>
                             </div>
                         </div>

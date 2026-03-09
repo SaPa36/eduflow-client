@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosPublic = axios.create({
-    baseURL: 'https://eduflow-server-ten.vercel.app',
+    baseURL: 'http://localhost:5008',
     // You can add any default headers or configurations here
 });
 

@@ -18,6 +18,7 @@ import TeacherRoutes from "./TeacherRoutes";
 import ManageClasses from "../Pages/DashBoard/ManageClasses/ManageClasses";
 import AllCourses from "../Pages/AllCourses/AllCourses";
 import MyRequest from "../Pages/DashBoard/MyRequest/MyRequest";
+import Payment from "../Pages/DashBoard/Payment/PaymentModal";
 
 
 export const router = createBrowserRouter([
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: "my-requests",
         element: <PrivateRoutes><MyRequest></MyRequest></PrivateRoutes>
+      },
+      {
+        path: "payment",
+        element: <PrivateRoutes><Payment></Payment></PrivateRoutes>
       },
       // Admin Routes
       { 
