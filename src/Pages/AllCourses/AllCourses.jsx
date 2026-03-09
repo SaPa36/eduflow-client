@@ -62,14 +62,14 @@ const AllCourses = () => {
                                     <div className="flex items-center gap-1 text-slate-500 text-xs">
                                         <FaUsers /> <span>{course.total_enrolment || 0} Students</span>
                                     </div>
-                                    
-                                        <button
-                                            onClick={() => setSelectedCourse(course)}
-                                            className="bg-slate-900 hover:bg-cyan-600 text-white px-4 py-1.5 rounded-lg transition-colors text-xs font-bold"
-                                        >
-                                            Enroll Now
-                                        </button>
-                                    
+
+                                    <button
+                                        onClick={() => setSelectedCourse(course)}
+                                        className="bg-slate-900 hover:bg-cyan-600 text-white px-4 py-1.5 rounded-lg transition-colors text-xs font-bold"
+                                    >
+                                        Enroll Now
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -98,11 +98,12 @@ const AllCourses = () => {
                 )}
             </div>
 
-            {/* MODAL IS PLACED HERE - Rendered only when a course is selected */}
-            <CourseModal
-                course={selectedCourse}
-                onClose={() => setSelectedCourse(null)}
-            />
+            {selectedCourse && (
+                <CourseModal
+                    course={selectedCourse}
+                    onClose={() => setSelectedCourse(null)}
+                />
+            )}
         </section>
     );
 };

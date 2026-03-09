@@ -128,10 +128,12 @@ const PopularCourses = () => {
                 </Swiper>
 
                 {/* MODAL IS PLACED HERE - Rendered only when a course is selected */}
-                <CourseModal
-                    course={selectedCourse}
-                    onClose={() => setSelectedCourse(null)}
-                />
+                {selectedCourse && (
+                    <CourseModal
+                        course={selectedCourse}
+                        onClose={() => setSelectedCourse(null)}
+                    />
+                )}
             </div>
 
             {/* Pagination Style Overwrite */}
