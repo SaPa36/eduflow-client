@@ -19,6 +19,7 @@ import ManageClasses from "../Pages/DashBoard/ManageClasses/ManageClasses";
 import AllCourses from "../Pages/AllCourses/AllCourses";
 import MyRequest from "../Pages/DashBoard/MyRequest/MyRequest";
 import Enrolled from "../Pages/DashBoard/Enrolled/Enrolled";
+import Profile from "../Pages/DashBoard/Profile/Profile";
 
 
 
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
     path: "dashboard",
     element: <PrivateRoutes><DashBoard /></PrivateRoutes>, // Protect the whole dashboard
     children: [
+      {
+        path: "profile",
+        element: <PrivateRoutes><Profile></Profile></PrivateRoutes>
+      },
       //student routes
       {
         path: "my-requests",

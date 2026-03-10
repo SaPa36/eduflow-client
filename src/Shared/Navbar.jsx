@@ -118,10 +118,13 @@ const Navbar = () => {
                                     <div className="w-10 rounded-full">
                                         <img
                                             alt="User Profile"
-                                            src={dbUser?.image || user?.photoURL || "https://i.ibb.co/mJR9n1S/default-avatar.png"}
+                                            src={dbUser?.image || "https://i.ibb.co/mJR9n1S/default-avatar.png"}
                                         />
                                     </div>
+                                    
                                 </div>
+
+                                
 
                                 {/* The Menu with Icons */}
                                 <ul
@@ -134,7 +137,7 @@ const Navbar = () => {
 
                                     {/* Profile Option */}
                                     <li>
-                                        <Link to="/profile" className="flex items-center gap-3 py-3 hover:bg-cyan-50 hover:text-cyan-600 transition-colors">
+                                        <Link to="dashboard/profile" className="flex items-center gap-3 py-3 hover:bg-cyan-50 hover:text-cyan-600 transition-colors">
                                             <FaUser className="text-cyan-500 w-4 h-4" />
                                             <span className="font-medium">Profile</span>
                                         </Link>

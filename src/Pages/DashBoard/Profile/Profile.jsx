@@ -1,0 +1,205 @@
+import { useContext, useState } from "react";
+import { AuthContext } from "../../../providers/AuthProvider";
+import {
+  FaEdit,
+  FaUserGraduate,
+  FaChalkboardTeacher,
+  FaUserShield,
+} from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+
+const Profile = () => {
+  const { user, dbUser } = useContext(AuthContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const axiosSecure = useAxiosSecure();
+
+  // Helper to get role-based icon
+  const getRoleIcon = () => {
+    if (dbUser?.role === "admin")
+      return <FaUserShield className="text-red-500" />;
+    if (dbUser?.role === "teacher")
+      return <FaChalkboardTeacher className="text-emerald-500" />;
+    return <FaUserGraduate className="text-blue-500" />;
+  };
+
+  // TanStack Query handles the loading and caching
+  const {
+    data: userData = {}, // Use userData as the source of truth
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ["user", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `http://localhost:5008/users/${user?.email}`
+      );
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  // Update handleUpdate to use the same flow
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const updatedData = {
+      name: e.target.name.value,
+      image: e.target.image.value,
+      bio: e.target.bio.value,
+    };
+    await axiosSecure.patch(
+      `http://localhost:5008/users/${user.email}`,
+      updatedData
+    );
+    setIsModalOpen(false);
+    refetch();
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      {/* Profile Header */}
+      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 flex flex-col md:flex-row items-center gap-6">
+        <img
+          src={dbUser?.image || "https://i.ibb.co/mJR9Qad/user.png"}
+          className="w-32 h-32 rounded-full border-4 border-cyan-500 p-1 object-cover"
+          alt="Profile"
+        />
+        <div className="flex-1 text-center md:text-left">
+          <h2 className="text-2xl font-bold text-slate-800">{dbUser?.name}</h2>
+          <div className="flex items-center justify-center md:justify-start gap-2 mt-1">
+            {getRoleIcon()}
+            <p className="text-cyan-600 font-bold uppercase text-sm tracking-widest">
+              {dbUser?.role}
+            </p>
+          </div>
+          <p className="text-slate-400">{dbUser?.email}</p>
+        </div>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 text-white px-6 py-2 rounded-full hover:bg-cyan-600 transition-all"
+        >
+          <FaEdit /> Edit Profile
+        </button>
+      </div>
+
+      {/* Quick Stats Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: "Account Status", value: "Verified" },
+          {
+            label: "Member Since",
+            value: dbUser?.createdAt
+              ? new Date(dbUser.createdAt).getFullYear()
+              : "2026",
+          },
+          { label: "Profile Level", value: "Basic" },
+          { label: "Last Login", value: "Today" },
+        ].map((stat, i) => (
+          <div
+            key={i}
+            className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-center"
+          >
+            <p className="text-[10px] uppercase font-bold text-slate-400">
+              {stat.label}
+            </p>
+            <p className="text-sm font-bold text-slate-700">{stat.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Main Content Sections */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Biography */}
+        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <h3 className="font-bold text-slate-800 mb-2">Biography</h3>
+          <p className="text-slate-500 italic">
+            {dbUser?.bio ||
+              "No biography added yet. Click edit to tell the community a little bit about yourself!"}
+          </p>
+        </div>
+
+        {/* Progress/Summary */}
+        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <h3 className="font-bold text-slate-800 mb-4">
+            {dbUser?.role === "teacher"
+              ? "Teaching Statistics"
+              : "Learning Progress"}
+          </h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-slate-600">Profile Completion</span>
+              <span className="font-bold text-cyan-600">75%</span>
+            </div>
+            <div className="w-full bg-slate-100 rounded-full h-2">
+              <div
+                className="bg-cyan-500 h-2 rounded-full"
+                style={{ width: "75%" }}
+              ></div>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Complete your profile to unlock more features.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white p-8 rounded-3xl w-full max-w-lg shadow-2xl animate-in zoom-in duration-300">
+            <h3 className="text-2xl font-bold mb-6 text-slate-800">
+              Edit Profile
+            </h3>
+
+            <form onSubmit={handleUpdate} className="space-y-4">
+              {/* Image Upload with Preview */}
+              <div className="flex flex-col items-center gap-4">
+                <img
+                  src={imagePreview}
+                  className="w-24 h-24 rounded-full object-cover border-4 border-cyan-100"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+                />
+              </div>
+
+              <input
+                name="name"
+                defaultValue={dbUser.name}
+                className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none"
+                placeholder="Full Name"
+              />
+              <textarea
+                name="bio"
+                defaultValue={dbUser.bio}
+                className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none"
+                placeholder="Tell us about yourself..."
+              ></textarea>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-xl"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 font-bold bg-cyan-500 text-white rounded-xl shadow-lg hover:bg-cyan-600 transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Profile;
