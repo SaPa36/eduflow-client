@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import {
   FaEdit,
@@ -8,75 +8,137 @@ import {
 } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const Profile = () => {
-  const { user, dbUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
 
-  // Helper to get role-based icon
-  const getRoleIcon = () => {
-    if (dbUser?.role === "admin")
-      return <FaUserShield className="text-red-500" />;
-    if (dbUser?.role === "teacher")
-      return <FaChalkboardTeacher className="text-emerald-500" />;
-    return <FaUserGraduate className="text-blue-500" />;
-  };
-
-  // TanStack Query handles the loading and caching
+  // 1. Fetch data using TanStack Query as the Single Source of Truth
   const {
-    data: userData = {}, // Use userData as the source of truth
+    data: userData = {},
     refetch,
     isLoading,
   } = useQuery({
     queryKey: ["user", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `http://localhost:5008/users/${user?.email}`
-      );
+      const res = await axiosSecure.get(`/users/${user?.email}`);
       return res.data;
     },
     enabled: !!user?.email,
   });
 
-  // Update handleUpdate to use the same flow
+  const [imagePreview, setImagePreview] = useState("");
+
+  useEffect(() => {
+    if (userData?.image) {
+      setImagePreview(userData.image);
+    }
+  }, [userData]);
+
+  // Helper to get role-based icon
+  const getRoleIcon = () => {
+    if (userData?.role === "admin")
+      return <FaUserShield className="text-red-500" />;
+    if (userData?.role === "teacher")
+      return <FaChalkboardTeacher className="text-emerald-500" />;
+    return <FaUserGraduate className="text-blue-500" />;
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    }
+  };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const updatedData = {
-      name: e.target.name.value,
-      image: e.target.image.value,
-      bio: e.target.bio.value,
-    };
-    await axiosSecure.patch(
-      `http://localhost:5008/users/${user.email}`,
-      updatedData
-    );
-    setIsModalOpen(false);
-    refetch();
+  
+    try {
+      const form = e.target;
+      const name = form.name.value;
+      const bio = form.bio.value;
+      const imageFile = form.imageFile.files[0];
+  
+      let imageUrl = userData?.image;
+  
+      // Upload image if selected
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("image", imageFile);
+  
+        const res = await axiosPublic.post(image_hosting_api, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+  
+        if (res.data.success) {
+          imageUrl = res.data.data.display_url;
+        }
+      }
+  
+      const updatedData = {
+        name,
+        bio,
+        image: imageUrl,
+      };
+  
+      await axiosSecure.patch(`/users/${user.email}`, updatedData);
+  
+      Swal.fire({
+        icon: "success",
+        title: "Profile Updated!",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      
+      
+      setIsModalOpen(false);
+      refetch();
+      
+  
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "Profile update failed", "error");
+    }
   };
+
+  if (isLoading) return <p className="p-10 text-center">Loading profile...</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Profile Header */}
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 flex flex-col md:flex-row items-center gap-6">
         <img
-          src={dbUser?.image || "https://i.ibb.co/mJR9Qad/user.png"}
+          src={userData?.image || "https://i.ibb.co/mJR9Qad/user.png"}
           className="w-32 h-32 rounded-full border-4 border-cyan-500 p-1 object-cover"
           alt="Profile"
         />
         <div className="flex-1 text-center md:text-left">
-          <h2 className="text-2xl font-bold text-slate-800">{dbUser?.name}</h2>
+          <h2 className="text-2xl font-bold text-slate-800">{userData?.name}</h2>
           <div className="flex items-center justify-center md:justify-start gap-2 mt-1">
             {getRoleIcon()}
             <p className="text-cyan-600 font-bold uppercase text-sm tracking-widest">
-              {dbUser?.role}
+              {userData?.role}
             </p>
           </div>
-          <p className="text-slate-400">{dbUser?.email}</p>
+          <p className="text-slate-400">{userData?.email}</p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 text-white px-6 py-2 rounded-full hover:bg-cyan-600 transition-all"
+          onClick={() => {
+            setImagePreview(
+              userData?.image || "https://i.ibb.co/mJR9Qad/user.png"
+            );
+            setIsModalOpen(true);
+          }}
+          className="flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 text-white px-6 py-2 rounded-full"
         >
           <FaEdit /> Edit Profile
         </button>
@@ -88,8 +150,8 @@ const Profile = () => {
           { label: "Account Status", value: "Verified" },
           {
             label: "Member Since",
-            value: dbUser?.createdAt
-              ? new Date(dbUser.createdAt).getFullYear()
+            value: userData?.createdAt
+              ? new Date(userData.createdAt).getFullYear()
               : "2026",
           },
           { label: "Profile Level", value: "Basic" },
@@ -113,7 +175,7 @@ const Profile = () => {
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
           <h3 className="font-bold text-slate-800 mb-2">Biography</h3>
           <p className="text-slate-500 italic">
-            {dbUser?.bio ||
+            {userData?.bio ||
               "No biography added yet. Click edit to tell the community a little bit about yourself!"}
           </p>
         </div>
@@ -121,7 +183,7 @@ const Profile = () => {
         {/* Progress/Summary */}
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
           <h3 className="font-bold text-slate-800 mb-4">
-            {dbUser?.role === "teacher"
+            {userData?.role === "teacher"
               ? "Teaching Statistics"
               : "Learning Progress"}
           </h3>
@@ -152,29 +214,31 @@ const Profile = () => {
             </h3>
 
             <form onSubmit={handleUpdate} className="space-y-4">
-              {/* Image Upload with Preview */}
               <div className="flex flex-col items-center gap-4">
                 <img
-                  src={imagePreview}
+                  src={imagePreview || "https://i.ibb.co/mJR9Qad/user.png"}
                   className="w-24 h-24 rounded-full object-cover border-4 border-cyan-100"
                 />
+                {/* Ensure this name is "imageFile" to match the logic above */}
                 <input
                   type="file"
-                  accept="image/*"
+                  name="imageFile"
+                  accept="image/png, image/jpeg, image/jpg, image/webp, image/gif"
                   onChange={handleImageChange}
-                  className="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+                  className="text-sm file:mr-4 file:py-2 file:px-4 
+                  file:rounded-full file:border-0 file:bg-cyan-500 file:text-white cursor-pointer"
                 />
               </div>
 
               <input
                 name="name"
-                defaultValue={dbUser.name}
+                defaultValue={userData.name}
                 className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none"
                 placeholder="Full Name"
               />
               <textarea
                 name="bio"
-                defaultValue={dbUser.bio}
+                defaultValue={userData.bio}
                 className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none"
                 placeholder="Tell us about yourself..."
               ></textarea>
