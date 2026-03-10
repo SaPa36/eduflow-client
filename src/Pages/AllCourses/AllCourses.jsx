@@ -9,6 +9,7 @@ const AllCourses = () => {
     const axiosPublic = useAxiosPublic();
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const [search, setSearch] = useState("");
     const itemsPerPage = 8;
 
     const { data: courses = [], isLoading } = useQuery({
@@ -19,21 +20,38 @@ const AllCourses = () => {
         }
     });
 
-    const totalPages = Math.ceil(courses.length / itemsPerPage);
+    const filteredCourses = courses.filter(course =>
+        course.title.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentCourses = courses.slice(indexOfFirstItem, indexOfLastItem);
+    const currentCourses = filteredCourses.slice(indexOfFirstItem, indexOfLastItem);
 
     if (isLoading) return <div className="text-center py-20 font-bold">Loading Courses...</div>;
 
     return (
-        <section className="mt-25 bg-slate-50 min-h-screen pb-20">
+        <section className="mt-23 bg-slate-50 min-h-screen pb-20">
             <div className="container mx-auto px-6">
-                <div className="mb-10 text-center">
+                <div className="mb-3 text-center">
                     <h2 className="text-4xl font-black text-slate-900 mb-2">
                         Explore <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">All Courses</span>
                     </h2>
                     <p className="text-slate-500">Find the perfect class to advance your career.</p>
+                </div>
+                {/* Search Bar */}
+                <div className="flex justify-center mb-5">
+                    <input
+                        type="text"
+                        placeholder="Search courses by title..."
+                        value={search}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                        className="w-full max-w-md px-5 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-cyan-400 shadow-sm"
+                    />
                 </div>
 
                 {/* Grid Layout */}
@@ -75,6 +93,12 @@ const AllCourses = () => {
                         </div>
                     ))}
                 </div>
+
+                {filteredCourses.length === 0 && (
+                    <div className="text-center py-20 text-slate-500 font-semibold">
+                        No courses found.
+                    </div>
+                )}
 
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
