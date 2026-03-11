@@ -113,7 +113,7 @@ const Profile = () => {
   if (isLoading) return <p className="p-10 text-center">Loading profile...</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-4xl mx-auto  space-y-3">
       {/* Profile Header */}
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 flex flex-col md:flex-row items-center gap-6">
         <img

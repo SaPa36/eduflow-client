@@ -20,6 +20,7 @@ import AllCourses from "../Pages/AllCourses/AllCourses";
 import MyRequest from "../Pages/DashBoard/MyRequest/MyRequest";
 import Enrolled from "../Pages/DashBoard/Enrolled/Enrolled";
 import Profile from "../Pages/DashBoard/Profile/Profile";
+import AdminHome from "../Pages/DashBoard/AdminHome/AdminHome";
 
 
 
@@ -71,6 +72,10 @@ export const router = createBrowserRouter([
       },
       
       // Admin Routes
+      {
+        path: "admin-home",
+        element: <AdminRoutes><AdminHome></AdminHome></AdminRoutes>
+      },
       { 
         path: "manage-users",
         element: <AdminRoutes><ManageUsers></ManageUsers></AdminRoutes>

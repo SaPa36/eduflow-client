@@ -51,6 +51,14 @@ const DashBoard = () => {
                     <ul className="space-y-1">
                         {role === 'admin' && (
                             <>
+
+                                <li>
+                                    <NavLink to="/dashboard/admin-home" 
+                                    onClick={() => setIsSidebarOpen(false)} className={navLinkClass}>
+                                        <FaHome size={16} /> <span>Admin Home</span>
+                                    </NavLink>
+                                </li>
+
                                 <li>
                                     <NavLink to="/dashboard/manage-classes"
                                     onClick={() => setIsSidebarOpen(false)}

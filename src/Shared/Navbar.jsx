@@ -118,7 +118,7 @@ const Navbar = () => {
                                     <div className="w-10 rounded-full">
                                         <img
                                             alt="User Profile"
-                                            src={dbUser?.image || "https://i.ibb.co/mJR9n1S/default-avatar.png"}
+                                            src={user?.image || dbUser?.image || "https://i.ibb.co/mJR9n1S/default-avatar.png"}
                                         />
                                     </div>
                                     
