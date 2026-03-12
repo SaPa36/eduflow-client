@@ -4,6 +4,7 @@ import { FaUsers, FaChalkboard, FaClock, FaDollarSign, FaWallet, FaArrowUp } fro
 
 
 
+
 const AdminHome = () => {
   const axiosSecure = useAxiosSecure();
 
@@ -26,7 +27,7 @@ const AdminHome = () => {
 
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
         {/* Users Card */}
         <div className="relative overflow-hidden group bg-white p-6 rounded-3xl shadow-xl border border-blue-100 hover:shadow-2xl transition-all duration-300">
@@ -86,24 +87,7 @@ const AdminHome = () => {
 
       </div>
 
-      {/* Analytics/Activity Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
-          <h3 className="font-bold text-xl text-slate-800 mb-6">Recent Activity Log</h3>
-          <div className="space-y-4">
-            {/* Add your activity feed list here */}
-            <p className="text-slate-400">No recent activity to display.</p>
-          </div>
-        </div>
-
-        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
-          <h3 className="font-bold text-xl text-slate-800 mb-6">System Health</h3>
-          {/* Add a chart or status summary here */}
-          <div className="w-full h-48 bg-slate-50 rounded-2xl flex items-center justify-center border-2 border-dashed border-slate-200">
-            <p className="text-slate-400">Add growth chart integration</p>
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 };

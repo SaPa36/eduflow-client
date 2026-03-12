@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from "../../../providers/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import usePagination from "../../../hooks/usePagination";
 import Pagination from "../Pagination/Pagination";
+import UpdateClassModal from "./UpdateClassModal";
 
 
 const MyClass = () => {
@@ -59,6 +60,15 @@ const MyClass = () => {
   };
 
   const { currentItems, currentPage, totalPages, setCurrentPage, itemsPerPage } = usePagination(classes, 10);
+  // 2. Add these state variables
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedClass, setSelectedClass] = useState(null);
+
+  // 3. This function runs when the Edit button is clicked
+  const handleEditClick = (cls) => {
+    setSelectedClass(cls); // Set the specific class data
+    setIsModalOpen(true);  // Open the modal
+  };
 
   if (isLoading)
     return (
@@ -68,7 +78,7 @@ const MyClass = () => {
     );
 
   return (
-    <div className=" bg-[#F8FAFC] min-h-screen">
+    <div className="  min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-4">
@@ -164,12 +174,12 @@ const MyClass = () => {
                       <div className="flex justify-end gap-3">
                         {" "}
                         {/* Added gap-3 for more room */}
-                        <Link
-                          to={`/dashboard/update-class/${cls._id}`}
-                          className="p-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white hover:bg-cyan-50 text-slate-400 hover:text-cyan-500 rounded-lg transition-all border border-slate-100"
+                        <button
+                          onClick={() => handleEditClick(cls)} // Changed from Link to button
+                          className="p-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-lg transition-all border border-slate-100"
                         >
-                          <FaEdit size={16} /> {/* Explicitly set size */}
-                        </Link>
+                          <FaEdit size={16} />
+                        </button>
                         <button
                           onClick={() => handleDelete(cls._id)}
                           className="p-2.5 bg-red-500 text-white hover:bg-rose-50 text-slate-400 hover:text-rose-500 rounded-lg transition-all border border-slate-100"
@@ -193,6 +203,15 @@ const MyClass = () => {
           </div>
         </div>
       </div>
+
+      {/* {isModalOpen && (
+        <UpdateClassModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          classData={selectedClass}
+          refetch={refetch}
+        />
+      )} */}
     </div>
   );
 };
