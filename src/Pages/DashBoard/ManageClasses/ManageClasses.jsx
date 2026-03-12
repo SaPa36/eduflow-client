@@ -42,7 +42,7 @@ const ManageClasses = () => {
     if (isLoading) return <div className="text-center py-20">Loading...</div>;
 
     return (
-        <div className=" bg-slate-50 min-h-screen">
+        <div className="  min-h-screen">
             <h2 className="text-3xl font-black mb-5 text-slate-800">Manage
                 <span className='bg-gradient-to-r from-cyan-400 to-blue-400
                       lg:from-cyan-500 lg:to-blue-600 bg-clip-text text-transparent'> All Classes    </span></h2>

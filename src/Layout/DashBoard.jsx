@@ -194,8 +194,8 @@ const DashBoard = () => {
                 </header>
 
                 {/* Main View Container */}
-                <main className="flex-1 overflow-y-auto  bg-[#F8FAFC]">
-                    <div className=" rounded-2xl p-2 md:p-8 min-h-full">
+                <main className="flex-1 overflow-y-auto  ">
+                    <div className=" rounded-2xl p-2 md:p-4 min-h-full">
                         <Outlet />
                     </div>
                 </main>
